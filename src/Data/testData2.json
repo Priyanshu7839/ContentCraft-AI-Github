@@ -1,0 +1,23 @@
+[
+    {
+        "label":"1",
+        "revenue":5
+    },
+    {
+        "label":"3",
+        "revenue":10
+        
+    },
+    {
+        "label":"5",
+        "revenue":17
+    },
+    {
+        "label":"7",
+        "revenue":23
+    },
+    {
+        "label":"10",
+        "revenue":30
+    }
+]

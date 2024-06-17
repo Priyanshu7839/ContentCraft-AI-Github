@@ -1,13 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const initialState = {
+    currNavbarElements:'Home'
+};
+
+
+
+
 const NavbarElementsSlice = createSlice({
     name:'NavbarElements',
-    initialState:{
-        currNavbarElements:'Home'
-    },
+    initialState:initialState,
     reducers:{
         setcurrNavbarElements:(state,action)=>{
             state.currNavbarElements = action.payload;
+            
         }
     }
 })

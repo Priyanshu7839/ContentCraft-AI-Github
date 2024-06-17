@@ -1,0 +1,23 @@
+[
+    {
+        "label":"Oct 1",
+        "revenue":70
+    },
+    {
+        "label":"Oct 8",
+        "revenue":75
+        
+    },
+    {
+        "label":"Oct 15 ",
+        "revenue":68
+    },
+    {
+        "label":"Oct 22 ",
+        "revenue":80
+    },
+    {
+        "label":"Oct 29 ",
+        "revenue":77
+    }
+]

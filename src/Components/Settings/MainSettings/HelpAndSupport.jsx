@@ -7,7 +7,16 @@ import { setcurrHelpAndSupportOptions } from '../../../Store/Slices/HelpAndSuppo
 const HelpAndSupport = () => {
     const dispatch = useDispatch();
     const currHelpAndSupportOptions = useSelector((state)=>state.HelpAndSupportOptions.currHelpAndSupportOptions);
-    console.log(currHelpAndSupportOptions);
+    
+
+    const SupportOptionsArray = [
+        'FAQs','Contact Support','Knowledge Base'
+    ]
+
+    const SupportCategoriesArray = [
+        'Technical Issues','Account Assistance','Content Generation'
+    ]
+
     return (
         <div className=' min-h-[100vh]'>
 
@@ -21,37 +30,22 @@ const HelpAndSupport = () => {
                     {/* ------------------Support Option Settings----------------------- */}
                     <div className='w-full flex-col'>
                         {/* ------------------------- FAQs ----------------------*/}
-                        <div className='w-full flex items-center justify-between py-[1rem] border-b-[2px] border-[#06142E] cursor-pointer'
-                        onClick={()=>{dispatch(setcurrHelpAndSupportOptions('faq'))}}
-                        >
-                            <h1 className='font-medium text-[20px]'>
-                                FAQs
-                            </h1>
-
-                            <IoMdArrowRoundForward className='text-[24px]' />
-                        </div>
-                        {/* ---------------------------------------------------- ----------------*/}
-                        {/* -------------------------Contact Support ----------------------*/}
-                        <div className='w-full flex items-center justify-between py-[1rem] border-b-[2px] border-[#06142E] cursor-pointer'
-                        onClick={()=>{dispatch(setcurrHelpAndSupportOptions('contactSupport'))}}
-                        >
-                            <h1 className='font-medium text-[20px]'>
-                                Contact Support
-                            </h1>
-
-                            <IoMdArrowRoundForward className='text-[24px]' />
-                        </div>
-                        {/* ---------------------------------------------------- ----------------*/}
-                        {/* -------------------------Knowledge Base ----------------------*/}
-                        <div className='w-full flex items-center justify-between py-[1rem]  cursor-pointer'
-                        onClick={()=>{dispatch(setcurrHelpAndSupportOptions('knowledgeBase'))}}
-                        >
-                            <h1 className='font-medium text-[20px]'>
-                                Knowledge Base
-                            </h1>
-
-                            <IoMdArrowRoundForward className='text-[24px]' />
-                        </div>
+                            {
+                                SupportOptionsArray.map((opt,index)=>{
+                                    return(
+                                        <div className={`w-full flex items-center justify-between py-[1rem] cursor-pointer ${index !== SupportOptionsArray.length - 1 && ' border-b-[2px] border-[#06142E]'}`}
+                                        key={index}
+                                        onClick={()=>{dispatch(setcurrHelpAndSupportOptions(`${opt}`))}}
+                                        >
+                                            <h1 className='font-medium text-[20px]'>
+                                                {opt}
+                                            </h1>
+                
+                                            <IoMdArrowRoundForward className='text-[24px]' />
+                                        </div>      
+                                    )
+                                })
+                            }
                         {/* ---------------------------------------------------- ----------------*/}
                     </div>
 
@@ -63,44 +57,29 @@ const HelpAndSupport = () => {
                     {/* ------------------Support Option Settings----------------------- */}
                     <div className='w-full flex-col'>
                         {/* ------------------------- Technical Issues ----------------------*/}
-                        <div className='w-full flex items-center justify-between py-[1rem] border-b-[2px] border-[#06142E] cursor-pointer'
-                        onClick={()=>{dispatch(setcurrHelpAndSupportOptions('technicalIssues'))}}
-                        >
-                            <h1 className='font-medium text-[20px]'>
-                                Technical Issues
-                            </h1>
-
-                            <IoMdArrowRoundForward className='text-[24px]' />
-                        </div>
-                        {/* ---------------------------------------------------- ----------------*/}
-                        {/* -------------------------Account Assistance ----------------------*/}
-                        <div className='w-full flex items-center justify-between py-[1rem] border-b-[2px] border-[#06142E] cursor-pointer'
-                        onClick={()=>{dispatch(setcurrHelpAndSupportOptions('accountAssistance'))}}
-                        >
-                            <h1 className='font-medium text-[20px]'>
-                                Account Assistance
-                            </h1>
-
-                            <IoMdArrowRoundForward className='text-[24px]' />
-                        </div>
-                        {/* ---------------------------------------------------- ----------------*/}
-                        {/* -------------------------Content Generation ----------------------*/}
-                        <div className='w-full flex items-center justify-between py-[1rem]  cursor-pointer'
-                        onClick={()=>{dispatch(setcurrHelpAndSupportOptions('contentGeneration'))}}
-                        >
-                            <h1 className='font-medium text-[20px]'>
-                                Content Generation
-                            </h1>
-
-                            <IoMdArrowRoundForward className='text-[24px]' />
-                        </div>
+                            {
+                                SupportCategoriesArray.map((category,index)=>{
+                                    return(
+                                        <div className={`w-full flex items-center justify-between py-[1rem] cursor-pointer ${index !== SupportOptionsArray.length - 1 && ' border-b-[2px] border-[#06142E]'}`}
+                                        key={index}
+                                        onClick={()=>{dispatch(setcurrHelpAndSupportOptions(`${category}`))}}
+                                        >
+                                            <h1 className='font-medium text-[20px]'>
+                                                    {category}
+                                            </h1>
+                
+                                            <IoMdArrowRoundForward className='text-[24px]' />
+                                        </div> 
+                                    )
+                                })
+                            }
                         {/* ---------------------------------------------------- ----------------*/}
                     </div>
 
                 </div>
                 {/* ---------------------------------------------Support categories End-------------------- */}
                 {/* ----------------------------------------------Feedback------------------------------------- */}
-                <div className='w-full flex items-center justify-between py-[1rem] px-[2rem] border-b-[2px] border-[#06142E] cursor-pointer bg-[#374868] text-[#ffffff] rounded-[10px]'
+                {/* <div className='w-full flex items-center justify-between py-[1rem] px-[2rem] border-b-[2px] border-[#06142E] cursor-pointer bg-[#374868] text-[#ffffff] rounded-[10px]'
                 onClick={()=>{dispatch(setcurrHelpAndSupportOptions('feedback'))}}
                 >
                     <h1 className='font-Inter font-medium text-[20px]'>
@@ -108,7 +87,7 @@ const HelpAndSupport = () => {
                     </h1>
 
                     <IoMdArrowRoundForward className='text-[24px]' />
-                </div>
+                </div> */}
                 {/* ----------------------------------------------Feedback-End--------------------------------- */}
                 
             </div>

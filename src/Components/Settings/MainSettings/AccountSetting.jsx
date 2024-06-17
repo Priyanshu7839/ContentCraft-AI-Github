@@ -11,6 +11,11 @@ const AccountSetting = () => {
   const dispatch = useDispatch();
   const currAccountSettingSlide = useSelector((state) => state.AccountSettingsSlide.currAccountSettingSlide);
 
+
+  const AccountSettingsControlArray = ['Change Password' , 'Change Email Address','Log Out'];
+
+  const AccountPersonalInformationArray = ['Edit Personal Information'];
+
   return (
     <div className='min-h-[100vh]'>
 
@@ -22,15 +27,23 @@ const AccountSetting = () => {
           <h1 className='font-semibold text-[28px]'>Personal Information</h1>
           {/* ------------------settings----------------------- */}
           <div className='w-full flex-col'>
-            <div className='w-full flex items-center justify-between cursor-pointer'
-              onClick={() => dispatch(setcurrAccountSettingSlide('EditPersonalInfo'))}
-            >
-              <h1 className='font-medium text-[20px]'>
-                Edit Personal Information
-              </h1>
 
-              <IoMdArrowRoundForward className='text-[24px]' />
-            </div>
+            {
+              AccountPersonalInformationArray.map((info,index)=>{
+                return(
+                  <div key={index} className={`w-full flex items-center justify-between py-[1rem] cursor-pointer ${index!==AccountPersonalInformationArray.length - 1 ?'border-b-[2px] border-[#06142E]':''}`}
+                      
+                    onClick={() => dispatch(setcurrAccountSettingSlide(`${info}`))}
+                  >
+                  <h1 className='font-medium text-[20px]'>
+                    {info}
+                  </h1>
+
+                  <IoMdArrowRoundForward className='text-[24px]' />
+                </div>
+                )
+              })
+            }
           </div>
         </div>
         {/* --------------------PersonalInformation-end---------------------------------------- */}
@@ -39,33 +52,25 @@ const AccountSetting = () => {
           <h1 className='font-semibold text-[28px]'>Account Controls</h1>
           {/* ------------------settings----------------------- */}
           <div className='w-full flex-col'>
-            <div className='w-full flex items-center justify-between py-[1rem] border-b-[2px] border-[#06142E] cursor-pointer'
-              onClick={() => dispatch(setcurrAccountSettingSlide('ChangePassword'))}
-            >
-              <h1 className='font-medium text-[20px]'>
-                Change Password
-              </h1>
+            {
+              AccountSettingsControlArray.map((settings,index)=>{
+                return(
 
-              <IoMdArrowRoundForward className='text-[24px]' />
-            </div>
-            {/* ------------------ */}
-            <div className='w-full flex items-center justify-between py-[1rem] border-b-[2px] border-[#06142E] cursor-pointer'
-              onClick={() => dispatch(setcurrAccountSettingSlide('ChangeEmail'))}
-            >
-              <h1 className='font-medium text-[20px]'>
-                Change Email Address
-              </h1>
+                  <div key={index} className={`w-full flex items-center justify-between py-[1rem] cursor-pointer ${index!==AccountSettingsControlArray.length - 1 ?'border-b-[2px] border-[#06142E]':''}`}
+                  
+                  onClick={() => dispatch(setcurrAccountSettingSlide(`${settings}`))}
+                  >
+                      <h1 className='font-medium text-[20px]'>
+                        {settings}
+                      </h1>
 
-              <IoMdArrowRoundForward className='text-[24px]' />
-            </div>
-            {/* ------------------- */}
-            <div className='w-full flex items-center justify-between py-[1rem]'>
-              <h1 className='font-medium text-[20px]'>
-                Log Out
-              </h1>
 
-              <IoMdArrowRoundForward className='text-[24px]' />
-            </div>
+                      <IoMdArrowRoundForward className='text-[24px]' />
+                  </div>
+                
+              )
+              })
+            }
           </div>
         </div>
         {/* --------------------Accounts Control-end------------------------------------------- */}

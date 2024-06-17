@@ -2,41 +2,60 @@ import React from 'react'
 import { HomePageImg1,HomePageImg2,HomePageImg3,HomePageImg4,HomePageImg5,HomePageImg6,HomePageImg7,HomePageImg8
     ,LandingPageImg1,LandingPageImg2,LandingPageImg3,LandingPageImg4
  } from '../../assets'
+import { useNavigate } from 'react-router-dom';
+import { setcurrAICustomModelOption } from '../../Store/Slices/AICustomModelOptionsSlice';
+import { setcurrNavbarElements } from '../../Store/Slices/NavbarElementsSlice';
+import { setcurrCollaborateSidebarOptions } from '../../Store/Slices/CollaborateSidebarOptionsSlice';
+import { useDispatch } from 'react-redux';
+
+
 
 const HomePage = () => {
+    
+    const dispatch = useDispatch()
+
+    const Navigate = useNavigate();
 
     const featuresArray = [
         {
             featureImg:HomePageImg1,
-            featureName:"AI Creation"
+            featureName:"AI Creation",
+            featurePath:'/contentcraft/CreateWithAI'
         },
         {
             featureImg:HomePageImg2,
-            featureName:"AI Consulting"
+            featureName:"AI Consulting",
+            featurePath:'/contentcraft/ConsultWithAI'
         },
         {
             featureImg:HomePageImg3,
-            featureName:"Collaborate"
+            featureName:"Collaborate",
+            featurePath:'/contentcraft/collaborate'
         },
         {
             featureImg:HomePageImg4,
-            featureName:"AI Custom Model"
+            featureName:"AI Custom Model",
+            featurePath:'/contentcraft/AICustomModel'
         },
         {
             featureImg:HomePageImg5,
-            featureName:"Add Content"
+            featureName:"Add Content",
+            featurePath:'/contentcraft/collaborate'
         },
         {
             featureImg:HomePageImg6,
-            featureName:"Schedule Meeting"
+            featureName:"Schedule Meeting",
+            featurePath:'#'
         },
         {
             featureImg:HomePageImg7,
-            featureName:"Explore Content"
+            featureName:"Explore Content",
+            featurePath:'#'
         },
         {
             featureImg:HomePageImg8,
-            featureName:"Dashboard"
+            featureName:"Dashboard",
+            featurePath:'/contentcraft/AICustomModel'
         },
         
     ]
@@ -101,11 +120,39 @@ const HomePage = () => {
             <h4 className='font-Inter text-[16px] font-medium text-[#FFFFFF]'>Engage in productive collaboration with ContentCraft AI. ContentCraft-AI  is your collaborative workspace where ideas come to life. Explore, 
                 create, and collaborate seamlessly to elevate your projects.</h4>
 
-            <div className=' p-[2rem] flex flex-wrap gap-[1rem] w-full items-center justify-between '>
+            <div className=' p-[2rem] flex flex-wrap gap-[1rem] w-full items-center justify-between cursor-pointer '
+            
+            >
                 
                { featuresArray.map((names, index)=>{
                     return (
-                       <div key={index} className='p-[1rem] w-[23%] flex flex-col items-center gap-[.5em] border-[2px] border-[#ff7643] rounded-[10px] bg-[#374868]'>
+                       <div key={index} className='p-[1rem] w-[23%] flex flex-col items-center gap-[.5em] border-[2px] border-[#ff7643] rounded-[10px] bg-[#374868]'
+                       onClick={()=>{
+                        Navigate(`${names.featurePath}`)
+
+                        if(names.featureName==='AI Custom Model'){
+                            dispatch(setcurrAICustomModelOption('Build Model'));
+                            
+                        }
+                        
+                        if (names.featureName === "Dashboard") {
+                            dispatch(setcurrAICustomModelOption('DashBoard'));
+                            dispatch(setcurrNavbarElements('DashBoard'))
+                            
+                        }
+                        if(names.featureName === 'Collaborate'){
+                            dispatch(setcurrNavbarElements('Collaborate'))
+                            dispatch(setcurrCollaborateSidebarOptions('Add Collaborator'))
+                        }
+                        if(names.featureName === 'Add Content'){
+                            dispatch(setcurrNavbarElements('Collaborate'))
+                            dispatch(setcurrCollaborateSidebarOptions('Add Content'))
+
+                        }
+
+                    
+                    }}
+                       >
                             <img src={names.featureImg} alt="" className='w-[40%]' />
                             <h1 className='font-Inter font-semibold text-[#FFFFFF] text-[18px]'>{names.featureName}</h1>
                        </div>
@@ -152,7 +199,9 @@ const HomePage = () => {
                
                 <div className='w-full'>
 
-                    <button className='font-Inter font-semibold text-[#ffffff] text-[16px] bg-[#ff7643] py-[.5rem] px-[2rem] rounded-[20px]'>
+                    <button className='font-Inter font-semibold text-[#ffffff] text-[16px] bg-[#ff7643] py-[.5rem] px-[2rem] rounded-[20px]'
+                    onClick={()=>{Navigate('/contentcraft/CreateWithAI')}}
+                    >
                        Explore AI-Driven Content Today!
                     </button>
 
@@ -223,7 +272,10 @@ const HomePage = () => {
 
                     <div className='w-full'>
 
-                        <button className='font-Inter font-semibold text-[#ffffff] text-[16px] bg-[#ff7643] py-[.5rem] px-[2rem] rounded-[20px]'>
+                        <button className='font-Inter font-semibold text-[#ffffff] text-[16px] bg-[#ff7643] py-[.5rem] px-[2rem] rounded-[20px]'
+                        onClick={()=>{Navigate('/contentcraft/ConsultWithAI')}}
+                        
+                        >
                             Start Consulting Now !  
                         </button>
 
@@ -238,6 +290,8 @@ const HomePage = () => {
                 </div>
                 {/* ------------------------------------------------section3-image-End------------------------------------------- */}
 
+
+    
 
 
 
@@ -292,7 +346,10 @@ const HomePage = () => {
 
                     <div className='w-full'>
 
-                        <button className='font-Inter font-semibold text-[#ffffff] text-[16px] bg-[#ff7643] py-[.5rem] px-[2rem] rounded-[20px]'>
+                        <button className='font-Inter font-semibold text-[#ffffff] text-[16px] bg-[#ff7643] py-[.5rem] px-[2rem] rounded-[20px]'
+                        onClick={()=>{Navigate('/contentcraft/collaborate')}}
+                        
+                        >
                         Start Collaborating with AI Today!
                         </button>
 
@@ -362,7 +419,14 @@ const HomePage = () => {
 
                     <div className='w-full'>
 
-                        <button className='font-Inter font-semibold text-[#ffffff] text-[16px] bg-[#ff7643] py-[.5rem] px-[2rem] rounded-[20px]'>
+                        <button className='font-Inter font-semibold text-[#ffffff] text-[16px] bg-[#ff7643] py-[.5rem] px-[2rem] rounded-[20px]'
+                        onClick={()=>{
+                            Navigate('/contentcraft/AICustomModel')
+                            dispatch(setcurrAICustomModelOption('Build Model'))
+                            
+                        }}
+                        
+                        >
                             Explore AI Custom Models Now!
                         </button>
 

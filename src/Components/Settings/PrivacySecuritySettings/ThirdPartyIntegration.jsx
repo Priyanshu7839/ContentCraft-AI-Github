@@ -19,7 +19,7 @@ const ThirdPartyIntegration = () => {
         >
             <IoMdArrowRoundBack className='text-[30px]' />
 
-            <h1 className='font-semibold text-[26px]'>Privacy Policy</h1>
+            <h1 className='font-semibold text-[26px]'>Third Party Integration</h1>
 
         </div>
         {/* ---------------------------two factor auth ------------------------- */}

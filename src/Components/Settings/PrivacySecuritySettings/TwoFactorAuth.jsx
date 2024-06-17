@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { QrCodeImg } from '../../../assets';
 
@@ -6,6 +6,11 @@ import { useDispatch } from 'react-redux';
 import { setcurrPrivacySettingSlide } from '../../../Store/Slices/PrivacyPolicySlice';
 
 const TwoFactorAuth = () => {
+
+    const [changesMade,setchangesMade] = useState(false);
+
+
+
     const dispatch = useDispatch();
     return (
         <div className='min-h-[100vh]'>
@@ -54,7 +59,9 @@ const TwoFactorAuth = () => {
                                 </div>
 
                                 <div className='flex gap-[1rem]'>
-                                    <button className='px-[.5rem] py-[.1rem] rounded-[5px] border-[1px] border-[#ff7643] text-[#ff7643] font-normal text-[16px]'>
+                                    <button className='px-[.5rem] py-[.1rem] rounded-[5px] border-[1px] border-[#ff7643] text-[#ff7643] font-normal text-[16px]'
+                                    onClick={()=>{setchangesMade(true)}}
+                                    >
                                         Regenerate
                                     </button>
 
@@ -69,15 +76,21 @@ const TwoFactorAuth = () => {
                         {/* ------------------------------------------------ */}
 
                         {/* ------------------------------Save Or Discard Changes Button------------ */}
-                        <div className='flex items-center justify-between gap-[3rem] font-semibold text-[18px]'>
-                                <button className='w-[50%] rounded-[20px] bg-[#ff7643] py-[.5rem]'>
+                        {changesMade &&
+                            
+                            <div className='flex items-center justify-between gap-[3rem] font-semibold text-[18px]'>
+                                <button className='w-[50%] rounded-[20px] bg-[#ff7643] py-[.5rem]'
+                                onClick={()=>setchangesMade(false)}
+                                >
                                      Save changes
                                 </button>
-                                <button className='w-[50%] rounded-[20px] py-[.5rem] border-[1px] border-[#ff7643] text-    [#ff7643]'>
+                                <button className='w-[50%] rounded-[20px] py-[.5rem] border-[1px] border-[#ff7643] text-    [#ff7643]'
+                                onClick={()=>setchangesMade(false)}
+                                >
                                     Discard Changes
                                 </button>
 
-                        </div>
+                        </div>}
                         {/* ------------------------------------------------------------------------ */}
                         {/* -----------------------------Disclaimer--------------------------------- */}
                         <div className='flex flex-col gap-[1rem]'>

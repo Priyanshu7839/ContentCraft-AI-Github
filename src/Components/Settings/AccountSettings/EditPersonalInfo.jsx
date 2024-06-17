@@ -1,5 +1,4 @@
 import React from 'react';
-import { SettingsSidebar } from '../../index';
 import { IoMdArrowRoundBack } from "react-icons/io";
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -62,6 +61,16 @@ const EditPersonalInfo = () => {
                             placeholder="What's your role?"
                             className='w-[100%] text-[#000] p-[.5rem] rounded-[10px] border-none outline-none' />
                     </div>
+                    {/* ----------------------------------Save Changes Button--------------------- */}
+                    <div className='w-[50%] flex'>
+
+                        <button
+                        className='w-[90%] p-[.5rem] bg-[#ff7643] rounded-[30px] font-Inter font-semibold text-[16px] text-center'>
+                            Save Changes
+                        </button>
+
+                    </div>
+
 
                 </div>
             </div>

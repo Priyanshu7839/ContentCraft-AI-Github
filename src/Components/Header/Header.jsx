@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { FiArrowUpRight } from "react-icons/fi";
 import {UserImg} from '../../assets'
-import { setcurrNavbarElements } from '../../Store/Slices/NavbarElementsSlice';
+import { setcurrNavbarElements, } from '../../Store/Slices/NavbarElementsSlice';
+import { setcurrAICustomModelOption } from '../../Store/Slices/AICustomModelOptionsSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import {ProfileSidebar} from '../index';
 
 
 const Header = () => {
@@ -11,6 +13,8 @@ const Header = () => {
     const dispatch = useDispatch();
     const currNavbarElements = useSelector((state)=>state.NavbarElements.currNavbarElements);
     const navigate = useNavigate();
+
+    const[showProfileSidebar,setshowProfileSidebar] = useState(false);
  
 
   return (
@@ -54,6 +58,8 @@ const Header = () => {
         <li
         onClick={()=>{
             dispatch(setcurrNavbarElements('DashBoard'));
+            dispatch(setcurrAICustomModelOption('DashBoard'))
+            navigate('/contentcraft/AICustomModel')
         }}
         className={`${currNavbarElements==='DashBoard'?'text-[#ff7643] font-semibold':'text-[#ffffff] font-normal'}`}
 
@@ -63,6 +69,7 @@ const Header = () => {
         <li
             onClick={()=>{
                 dispatch(setcurrNavbarElements('TaskManager'));
+                navigate('/contentcraft/Taskmanager')
             }}
         className={`${currNavbarElements==='TaskManager'?'text-[#ff7643] font-semibold':'text-[#ffffff] font-normal'}`}
 
@@ -72,6 +79,7 @@ const Header = () => {
         <li
             onClick={()=>{
                 dispatch(setcurrNavbarElements('Collaborate'));
+                navigate('/contentcraft/collaborate');
             }}
         className={`${currNavbarElements==='Collaborate'?'text-[#ff7643] font-semibold':'text-[#ffffff] font-normal'}`}
 
@@ -81,13 +89,14 @@ const Header = () => {
         <li
             onClick={()=>{
                 dispatch(setcurrNavbarElements('Settings'));
-                navigate('/settings')
+                navigate('/contentcraft/settings')
             }}
         className={`${currNavbarElements==='Settings'?'text-[#ff7643] font-semibold':'text-[#ffffff] font-normal'}`}
 
         >
             Settings
         </li>
+
        </ul>
 
     {/* --------------------------------------------------------------------------------------------------------------- */}
@@ -97,7 +106,11 @@ const Header = () => {
 
     {/* --------------------------------------------------------------------------------------------------------------- */}
 
-       <div className='cursor-pointer flex gap-[1.5rem] items-center justify-center'>
+       <div className='cursor-pointer flex gap-[1.5rem] items-center justify-center'
+            onClick={()=>{
+                setshowProfileSidebar(!showProfileSidebar);
+            }}
+       >
             <div className='rounded-full w-[56px] h-[56px] bg-red-400  overflow-hidden border-[1px] border-[#ff7643]'>
 
                 <img src={UserImg} alt=""  className='w-[100%] h-[100%] object-fit'/>
@@ -105,6 +118,14 @@ const Header = () => {
             </div>
             <h1 className='font-Inter font-semibold text-[#FFFFFF] text-[16px]'>TrafalGar Law</h1>
        </div>
+
+       {showProfileSidebar &&
+
+            <div className='fixed top-0 right-0 '>      
+              <ProfileSidebar setshowProfileSidebar={setshowProfileSidebar}/>
+            </div>
+       
+       }
 
     {/* --------------------------------------------------------------------------------------------------------------- */}
     </>

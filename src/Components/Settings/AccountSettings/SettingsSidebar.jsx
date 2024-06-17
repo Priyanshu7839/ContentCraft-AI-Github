@@ -2,11 +2,15 @@ import React, { useState } from 'react'
 import { UserImg } from '../../../assets'
 import { IoSearchCircleSharp } from "react-icons/io5";
 
+
 import { setCurrPanel } from '../../../Store/Slices/settingSidebarSlice';
 import { setcurrAccountSettingSlide } from '../../../Store/Slices/AccountSettingsSlice';
 import { setcurrPrivacySettingSlide } from '../../../Store/Slices/PrivacyPolicySlice';
 import { setcurrHelpAndSupportOptions } from '../../../Store/Slices/HelpAndSupportOptionsSlice';
+import { setcurrAppVersionAndUpdatesOptions } from '../../../Store/Slices/AppVersionAndUpdatesSettingsOptionsSlice';
 import { useSelector, useDispatch } from 'react-redux';
+import { AccountSettingIcon } from '../../../assets/SVGs/Svg';
+
 
 const SettingsSidebar = () => {
 
@@ -28,7 +32,7 @@ const SettingsSidebar = () => {
                 </div>
 
                 <div className='text-[42px] text-[#ffffff]'>
-                    <IoSearchCircleSharp />
+                <IoSearchCircleSharp/>
                 </div>
             </div>
 
@@ -40,14 +44,11 @@ const SettingsSidebar = () => {
                         dispatch(setcurrAccountSettingSlide(''))
                         dispatch(setcurrPrivacySettingSlide(''))
                         dispatch(setcurrHelpAndSupportOptions(''))
+                        dispatch(setcurrAppVersionAndUpdatesOptions(''))
                     }}
                 >
 
-                    <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M27 28.125V25.875C27 24.6815 26.5259 23.5369 25.682 22.693C24.8381 21.8491 23.6935 21.375 22.5 21.375H13.5C12.3065 21.375 11.1619 21.8491 10.318 22.693C9.47411 23.5369 9 24.6815 9 25.875V28.125" stroke="#FF7643" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                        <path d="M18 16.875C20.4853 16.875 22.5 14.8603 22.5 12.375C22.5 9.88972 20.4853 7.875 18 7.875C15.5147 7.875 13.5 9.88972 13.5 12.375C13.5 14.8603 15.5147 16.875 18 16.875Z" stroke="#FF7643" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                        <path d="M18 33C26.2843 33 33 26.2843 33 18C33 9.71573 26.2843 3 18 3C9.71573 3 3 9.71573 3 18C3 26.2843 9.71573 33 18 33Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
+                    <AccountSettingIcon/>
 
                     <h1>
                         Account Settings
@@ -60,6 +61,8 @@ const SettingsSidebar = () => {
                         dispatch(setcurrAccountSettingSlide(''))
                         dispatch(setcurrPrivacySettingSlide(''))
                         dispatch(setcurrHelpAndSupportOptions(''))
+                        dispatch(setcurrAppVersionAndUpdatesOptions(''))
+
                     }}
                 >
 
@@ -81,6 +84,8 @@ const SettingsSidebar = () => {
                         dispatch(setcurrAccountSettingSlide(''))
                         dispatch(setcurrPrivacySettingSlide(''))
                         dispatch(setcurrHelpAndSupportOptions(''))
+                        dispatch(setcurrAppVersionAndUpdatesOptions(''))
+
                     }}
                 >
 
@@ -102,6 +107,8 @@ const SettingsSidebar = () => {
                                     dispatch(setcurrAccountSettingSlide(''))
                                     dispatch(setcurrPrivacySettingSlide(''))
                                     dispatch(setcurrHelpAndSupportOptions(''))
+                                    dispatch(setcurrAppVersionAndUpdatesOptions(''))
+
                     }}
                 >
 
@@ -122,6 +129,8 @@ const SettingsSidebar = () => {
                                     dispatch(setcurrAccountSettingSlide(''))
                                     dispatch(setcurrPrivacySettingSlide(''))
                                     dispatch(setcurrHelpAndSupportOptions(''))
+                                    dispatch(setcurrAppVersionAndUpdatesOptions(''))
+
                     }}
                 >
 
@@ -151,6 +160,8 @@ const SettingsSidebar = () => {
                         dispatch(setcurrAccountSettingSlide(''))
                         dispatch(setcurrPrivacySettingSlide(''))
                         dispatch(setcurrHelpAndSupportOptions(''))
+                        dispatch(setcurrAppVersionAndUpdatesOptions(''))
+
                     }}
                 >
                     <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -176,6 +187,8 @@ const SettingsSidebar = () => {
                         dispatch(setcurrAccountSettingSlide(''))
                         dispatch(setcurrPrivacySettingSlide(''))
                         dispatch(setcurrHelpAndSupportOptions(''))
+                        dispatch(setcurrAppVersionAndUpdatesOptions(''))
+
 
                     }}
                 >
@@ -198,6 +211,8 @@ const SettingsSidebar = () => {
                                     dispatch(setcurrAccountSettingSlide(''))
                                     dispatch(setcurrPrivacySettingSlide(''))
                                     dispatch(setcurrHelpAndSupportOptions(''))
+                                    dispatch(setcurrAppVersionAndUpdatesOptions(''))
+
                     }}
                 >
                     <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">

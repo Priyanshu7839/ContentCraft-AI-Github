@@ -6,7 +6,7 @@ const MainLayout = () => {
   return (
    <main className="font-Inter">
         <Header/>
-            <div className="bg-[#06142e] h-[100vh] overflow-x-scroll scroll-smooth">
+            <div className="bg-[#06142e] min-h-[100vh] overflow-x-scroll scroll-smooth">
                 <Outlet/>
             </div>
         <Footer/>

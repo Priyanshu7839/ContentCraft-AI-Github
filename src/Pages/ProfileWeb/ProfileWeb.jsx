@@ -3,6 +3,13 @@ import { IoMailOutline } from "react-icons/io5";
 import { IoMdArrowRoundForward } from "react-icons/io";
 import { CiEdit } from "react-icons/ci";
 import {UserImg,InviteRequestImg1,InviteRequestImg2,InviteRequestImg3} from '../../assets/index';
+import { useNavigate } from 'react-router-dom';
+
+import { useDispatch } from 'react-redux';
+import { setcurrCollaborateSidebarOptions } from '../../Store/Slices/CollaborateSidebarOptionsSlice';
+import { setcurrAddCollaborationOptions } from '../../Store/Slices/AddCollaboratorOptionsSlice';
+import { setcurrTaskmanagerSidebarOptions } from '../../Store/Slices/TaskmanagerSidebarOptionsSlice';
+
 
 const PercentageRing = ({ percentage }) => {
     const radius = 50;
@@ -48,6 +55,10 @@ const PercentageRing = ({ percentage }) => {
   
 
 const ProfileWeb = () => {
+    
+    const navigate = useNavigate();
+
+    const dispatch = useDispatch();
 
     const UserData = {
         img:UserImg,
@@ -274,9 +285,16 @@ const ProfileWeb = () => {
             <div className='w-[65%]  flex items-stretch justify-between'>
                     {/* -----------------Tasks Due---------------------- */}
                     <div className='p-[2rem] bg-[#1e2d4a] flex flex-col gap-[1rem] w-[58%] rounded-[10px]'>
-                        <div className='flex items-center justify-between '>
+                        <div className='flex items-center justify-between cursor-pointer'
+                        onClick={()=>
+                            {
+                                navigate('/contentcraft/TaskManager')
+                                dispatch(setcurrTaskmanagerSidebarOptions('Task Assigned'))
+                            }
+                        }
+                        >
                             <h1 className='font-semibold font-Inter text-[#ffffff] text-[24px]'>
-                                Invite Requests
+                                Tasks Due
                             </h1>
                             <IoMdArrowRoundForward className='text-[#ffffff]'/>
                         </div>  
@@ -302,7 +320,13 @@ const ProfileWeb = () => {
                     </div>
                     {/* ---------------Upcoming Meetings------------------------ */}
                     <div className='p-[2rem] bg-[#1e2d4a] flex flex-col gap-[1rem] w-[39%] rounded-[10px]'>
-                         <div className='flex items-center justify-between  '>
+                         <div className='flex items-center justify-between  cursor-pointer '
+                         onClick={()=>{
+                            navigate('/contentcraft/collaborate') 
+                            dispatch(setcurrCollaborateSidebarOptions('Upcoming Meetings'))
+                            
+                         }}
+                         >
                             <h1 className='font-semibold font-Inter text-[#ffffff] text-[24px]'>
                                 Upcoming Meetings
                             </h1>
@@ -334,7 +358,13 @@ const ProfileWeb = () => {
         {/* ------------------------------------------------- */}
             {/* --------------------------Invite requests--------------------------------------- */}
             <div className='w-[33%] p-[2rem] flex flex-col gap-[1rem] bg-[#1e2d4a] rounded-[10px]'>
-                <div className='flex items-center justify-between '>
+                <div className='flex items-center justify-between cursor-pointer '
+                onClick={()=>{
+                    navigate('/contentcraft/collaborate')
+                    dispatch(setcurrCollaborateSidebarOptions('Add Collaborator'))
+                    dispatch(setcurrAddCollaborationOptions('Invite Requests'))
+                }}
+                >
                     <h1 className='font-semibold font-Inter text-[#ffffff] text-[24px]'>
                         Invite Requests
                     </h1>

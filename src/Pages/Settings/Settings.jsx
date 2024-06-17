@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SettingsSidebar, ChangeEmail, AccountSetting, EditPersonalInfo, ChangePassword, PrivacySecuritySettings,LinkToPrivacyPolicy,DataCollectionAndUsage,PasswordPolicies,NotificationSettings,CollaborationSettings,          AppVersionAndUpdates, TwoFactorAuth,ThirdPartyIntegration,IncidentReportingForm,SecurityMeasures,HelpAndSupport,Faq
+import { SettingsSidebar, ChangeEmail, AccountSetting, EditPersonalInfo, ChangePassword, PrivacySecuritySettings,LinkToPrivacyPolicy,DataCollectionAndUsage,PasswordPolicies,NotificationSettings,CollaborationSettings,          AppVersionAndUpdates, TwoFactorAuth,ThirdPartyIntegration,IncidentReportingForm,SecurityMeasures,HelpAndSupport,Faq,ContentGenerationPreferences, KnowledgeBase,ReleaseNotes,Feedback, ContactSupport,AccountAssistanceForm,ContentGenerationSupportForm,TechnicalIssuesForm
  } from '../../Components/index'
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -8,8 +8,7 @@ const Settings = () => {
   const currAccountSettingSlide = useSelector((state) => state.AccountSettingsSlide.currAccountSettingSlide);
   const currPrivacySettingSlide = useSelector((state) => state.PrivacySettingsSlide.currPrivacySettingSlide);
   const currHelpAndSupportOptions = useSelector((state)=>state.HelpAndSupportOptions.currHelpAndSupportOptions);
-
-
+  const currAppVersionAndUpdatesOptions = useSelector((state)=>state.AppVersionAndUpdatesOptions.currAppVersionAndUpdatesOptions);
 
  
   return (
@@ -40,6 +39,13 @@ const Settings = () => {
       }
 
       {
+        currPanel === 'ContentGeneration' && currHelpAndSupportOptions === '' &&
+
+        <>
+        <ContentGenerationPreferences/>
+        </>
+      }
+      {
         currPanel === 'CollabSettings' && currPrivacySettingSlide === '' &&
 
         <>
@@ -47,7 +53,7 @@ const Settings = () => {
         </>
       }
       {
-        currPanel === 'AppUpdates' && currPrivacySettingSlide === '' &&
+        currPanel === 'AppUpdates' && currAppVersionAndUpdatesOptions === '' &&
 
         <>
         <AppVersionAndUpdates/>
@@ -67,20 +73,20 @@ const Settings = () => {
 
 
       {
-        currAccountSettingSlide === 'EditPersonalInfo' &&
+        currAccountSettingSlide === 'Edit Personal Information' &&
 
         <EditPersonalInfo />
       }
 
       {
-        currAccountSettingSlide === 'ChangePassword' &&
+        currAccountSettingSlide === 'Change Password' &&
 
         <ChangePassword />
 
       }
 
       {
-        currAccountSettingSlide === 'ChangeEmail' &&
+        currAccountSettingSlide === 'Change Email Address' &&
 
         <ChangeEmail />
       }
@@ -89,51 +95,92 @@ const Settings = () => {
       {/* ----------------------Privacy settings Controls -------------------------------- */}
       
             {
-                currPrivacySettingSlide === 'LinkToPrivacyPolicy' && 
+                currPrivacySettingSlide === 'Link to Privacy Policy' && 
 
                 <LinkToPrivacyPolicy/>
             }
 
             {
-              currPrivacySettingSlide === 'DataCollection' &&
+              currPrivacySettingSlide === 'Data Collection And Usage' &&
 
               <DataCollectionAndUsage/>
             }
 
             {
-              currPrivacySettingSlide === 'PasswordPolicies' &&
+              currPrivacySettingSlide === 'Password Policies' &&
 
               <PasswordPolicies/>
             }
             {
-              currPrivacySettingSlide === 'TwoFactorAuth' && 
+              currPrivacySettingSlide === 'Two-Factor Authentication (2FA)' && 
 
               <TwoFactorAuth/>
             }
             {
-              currPrivacySettingSlide === 'ThirdPartyIntegration' &&
+              currPrivacySettingSlide === 'Third-Party Integration' &&
 
               <ThirdPartyIntegration/>
             }
 
-            {currPrivacySettingSlide === 'IncidentResponse' &&
+            {currPrivacySettingSlide === 'Incident Response' &&
 
              <IncidentReportingForm/>
             
             }
             {
-            currPrivacySettingSlide === 'SecurityMeasures' &&
+            currPrivacySettingSlide === 'Security Measures' &&
 
             <SecurityMeasures/>
             }
 
       {/* ----------------------Privacy settings Controls End -------------------------------- */}
+      {/* ----------------------App Version And Updates ------------------------------------ */}
+            {
+              currAppVersionAndUpdatesOptions === 'Release Notes' &&
+
+                <ReleaseNotes/>
+            }
+
+            {
+              currAppVersionAndUpdatesOptions === 'Feedback' &&
+
+              <Feedback/>
+            }
+      {/* ----------------------App Version And Updates End -------------------------------- */}
+
       {/* ----------------------Help and Support ------------------------------------ */}
       {
-          currHelpAndSupportOptions === 'faq' && 
+          currHelpAndSupportOptions === 'FAQs' && 
 
           <Faq/>
       }
+      {
+          currHelpAndSupportOptions === 'Knowledge Base' && 
+
+          <KnowledgeBase/>
+      }
+      {
+        currHelpAndSupportOptions === 'Contact Support' &&
+
+        <ContactSupport/>
+      }
+      {
+        currHelpAndSupportOptions === 'Technical Issues' &&
+
+        <TechnicalIssuesForm/>
+      }
+      {
+        currHelpAndSupportOptions === 'Account Assistance' &&
+
+        <AccountAssistanceForm/>
+      }
+      {
+        currHelpAndSupportOptions === 'Content Generation' &&
+        
+        <ContentGenerationSupportForm/>
+      }
+
+
       {/* ----------------------Help and Support End -------------------------------- */}
 
 
