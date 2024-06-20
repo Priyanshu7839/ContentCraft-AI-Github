@@ -54,19 +54,20 @@ const SignUp = () => {
       errors.email = "!!Enter an Valid Email Address"
     }
 
-
-    if (!values.password || !confirmPassword) {
-      errors.password = "!!Please Fill both Password Fields";
-
+    if(!values.password){
+      errors.password = 'Please Enter your password'
+    }
+    else if (!confirmPassword) {
+      errors.confirm = "!!Please Fill both Password Fields";
     }
     else if(values.password != confirmPassword){
-      errors.password = 'Both Passwords should be same'
+      errors.confirm = 'Both Passwords should be same'
     }
     else if (values.password.length < 4) {
-      errors.password = "!!Length of Password is Too short";
+      errors.confirm = "!!Length of Password is Too short";
     }
     else if (values.password.length > 10) {
-      errors.password = "!!Length of Password is Too long";
+      errors.confirm = "!!Length of Password is Too long";
     }
 
     return errors;
@@ -133,7 +134,7 @@ const SignUp = () => {
 
             </div>
 
-            <p className="text-[#ff0000]">{formErrors.name}</p>
+           {formErrors.name && <p className="text-[#ff0000]">{formErrors.name}</p>}
             {/* ----------------------Name Div End------------ */}
             {/* -----------------Email Div--------------------- */}
             <div className='w-full relative '>
@@ -149,7 +150,7 @@ const SignUp = () => {
               </div>
 
             </div>
-            <p className="text-[#ff0000]">{formErrors.email}</p>
+            {formErrors.email && <p className='text-[#ff0000]'>{formErrors.email}</p>}
 
             {/* ----------------------Email Div End------------ */}
             {/* -----------------Password Div--------------------- */}
@@ -168,6 +169,7 @@ const SignUp = () => {
               </div>
 
             </div>
+            {formErrors.password && <p className="text-[#ff0000]">{formErrors.password}</p> }
             {/* ----------------------Password Div End------------ */}
 
             {/* ---------Confirm Password And Forgot Password Div---------------------------------------------------- */}
@@ -196,7 +198,7 @@ const SignUp = () => {
 
 
             </div>
-            <p className="text-[#ff0000]">{formErrors.password}</p>
+            {formErrors.confirm && <p className="text-[#ff0000]">{formErrors.confirm}</p>}
 
             {/* ---------Password And Forgot Password Div----End--------------------------------------------- */}
 
