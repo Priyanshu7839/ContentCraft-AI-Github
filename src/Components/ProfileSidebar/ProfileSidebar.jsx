@@ -64,7 +64,7 @@ const ProfileSidebar = ({ setshowProfileSidebar }) => {
                                 navigate('/contentcraft/settings')
                                 toggleSidebar()
                                 dispatch(setcurrNavbarElements('Settings'));
-                                dispatch(setCurrPanel('AccSettings'))
+                                dispatch(setCurrPanel('Account Settings'))
                                 dispatch(setcurrAccountSettingSlide('Change Password'))
                             }}
 

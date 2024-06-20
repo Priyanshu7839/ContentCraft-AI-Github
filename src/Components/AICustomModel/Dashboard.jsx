@@ -1,5 +1,6 @@
 import React from 'react'
 import { IoIosArrowForward } from "react-icons/io";
+import { Chart as ChartJS, defaults } from 'chart.js/auto';
 import { Line } from 'react-chartjs-2';
 import testData from '../../Data/testData.json';
 import { useNavigate } from 'react-router-dom';
@@ -21,7 +22,7 @@ const PercentageRing = ({ percentage }) => {
             <svg width="60" height="60" className="transform-rotate-90">
                 <circle
                     className="text-[#06142E]"
-                    strokeWidth="7.5" // Half of 15 to maintain proportion
+                    strokeWidth="7.5" 
                     stroke="currentColor"
                     fill="transparent"
                     r={radius / 2} // Half of the original radius
@@ -30,7 +31,7 @@ const PercentageRing = ({ percentage }) => {
                 />
                 <circle
                     className="text-[#ff7643]"
-                    strokeWidth="7.5" // Half of 15 to maintain proportion
+                    strokeWidth="7.5" 
                     strokeDasharray={circumference / 2} // Adjust to match the new radius
                     strokeDashoffset={offset / 2} // Adjust to match the new radius
                     stroke="currentColor"
@@ -197,7 +198,7 @@ const Dashboard = () => {
                                         dispatch(setcurrNavbarElements(`${buttons.navElement}`))
 
                                         if(buttons.name=== 'Help And Support'){
-                                            dispatch(setCurrPanel('HelpSupport'))
+                                            dispatch(setCurrPanel('Help And Support'))
                                         }
                                         
                                     }}

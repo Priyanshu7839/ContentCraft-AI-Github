@@ -18,49 +18,49 @@ const Settings = () => {
       </div>
       {/* -------------------------Main Settings Panel----------------------------------- */}
       {
-        (currPanel === 'AccSettings' && currAccountSettingSlide === '') &&
+        (currPanel === 'Account Settings' && currAccountSettingSlide === '') &&
         <>
           <AccountSetting />
         </>
       }
 
       {
-        (currPanel === 'Privacy' && currPrivacySettingSlide === '') &&
+        (currPanel === 'Privacy & Security' && currPrivacySettingSlide === '') &&
         <>
           <PrivacySecuritySettings />
         </>
       }
 
       {
-        (currPanel === 'NotiSettings' && currPrivacySettingSlide === '' )&&
+        (currPanel === 'Notification Settings' && currPrivacySettingSlide === '' )&&
         <>
           <NotificationSettings/>
         </>
       }
 
       {
-        currPanel === 'ContentGeneration' && currHelpAndSupportOptions === '' &&
+        currPanel === 'Content Generation Preferences' && currHelpAndSupportOptions === '' &&
 
         <>
         <ContentGenerationPreferences/>
         </>
       }
       {
-        currPanel === 'CollabSettings' && currPrivacySettingSlide === '' &&
+        currPanel === 'Collaboration Settings' && currPrivacySettingSlide === '' &&
 
         <>
         <CollaborationSettings/>
         </>
       }
       {
-        currPanel === 'AppUpdates' && currAppVersionAndUpdatesOptions === '' &&
+        currPanel === 'App version And Updates' && currAppVersionAndUpdatesOptions === '' &&
 
         <>
         <AppVersionAndUpdates/>
         </>
       }
       {
-        currPanel === 'HelpSupport' && currHelpAndSupportOptions === '' &&
+        currPanel === 'Help And Support' && currHelpAndSupportOptions === '' &&
 
         <>
         <HelpAndSupport/>

@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const settingSidebarSlice = createSlice({
     name:'panel',
     initialState:{
-        currPanel:'AccSettings'
+        currPanel:'Account Settings'
     },
     reducers:{
         setCurrPanel:(state,action)=>{

@@ -1,9 +1,63 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { LockSvg, MailSvg, LineSvg } from '../../assets/SVGs/Svg'
 import { FaFacebook, FaGoogle, FaApple } from "react-icons/fa6";
 import { Link } from 'react-router-dom';
 
 const SignIn = () => {
+
+  const initialValues ={
+    email:"",
+    password:""
+  };
+
+  const [formValues,setformvalues] = useState(initialValues) // actual data to be used for sign in//////////
+  const [formErrors,setformErrors] = useState({});
+
+ const handleChange = (e) => {
+  const {name,value} = e.target;
+  setformvalues({...formValues,[name]:value})
+ }
+
+ const handleLoginSubmit = (e) => {
+  e.preventDefault();
+
+  setformErrors(validate(formValues));
+
+  if(Object.keys(formErrors).length===0){
+    console.log('Email',formValues.email);
+    console.log('Password',formValues.password);
+  }
+
+ }
+
+ const validate = (values) => {
+  const errors = {};
+  const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
+  if(!values.email){
+    errors.email = 'Please Enter Your Email'
+  }
+  else if(!regex.test(values.email)){
+    errors.email = 'Please Enter a Valid Email Address'
+  }
+
+  if(!values.password){
+    errors.password = 'Please Enter Your Password'
+  }
+  else if(values.password.length < 4){
+    errors.password = 'Your Password is too short'
+  }
+  else if(values.password.length > 10){
+    errors.password = 'Your password is too long'
+  }
+
+  return errors
+
+ }
+
+  
+ 
+
   return (
     <div className='bg-[#06142e] min-h-[100vh] px-[2rem] py-[.5rem] font-Inter text-[#ffffff]' >
       {/* -----------------------------Header Div-------------------------------------------------- */}
@@ -43,30 +97,46 @@ const SignIn = () => {
             <h1 className='text-[20px] font-semibold'>Let's Craft Brilliance Toghether</h1>
 
             {/* -----------Inputs Div------------------------------- */}
-
-            <div className='flex flex-col gap-[1rem]'>
+           
+            <form className='flex flex-col gap-[1rem]' onSubmit={handleLoginSubmit}>
 
               {/* -----------------Email Div--------------------- */}
               <div className='w-full relative '>
-                <input type="text " className=' w-full  px-[1rem] py-[.5rem] pl-[4rem] rounded-full outline-none border-[2px] border-[#ff7643] bg-transparent text-[#fff] placeholder:text-[#ff754383]' placeholder='Email Address' />
+                <input type="text " className=' w-full  px-[1rem] py-[.5rem] pl-[4rem] rounded-full outline-none border-[2px] border-[#ff7643] bg-transparent text-[#fff] placeholder:text-[#ff754383]'
+                 placeholder='Email Address'
+                 name='email'
+                 onChange={handleChange}
+                 value={formValues.email}
+                 />
 
                 <div className='w-fit absolute top-[50%] left-5 translate-y-[-50%] border-r-[1px] pr-[5px] border-[#ff7643]'>
                   <MailSvg />
                 </div>
 
               </div>
+
+              <p className='text-[#ff0000]'>{formErrors.email}</p>
+
               {/* ----------------------Email Div End------------ */}
 
               {/* ---------Password And Forgot Password Div---------------------------------------------------- */}
               <div className='flex flex-col gap-[.5rem]'>
                 <div className='w-full relative '>
-                  <input type="text " className=' w-full  px-[1rem] py-[.5rem] pl-[4rem] rounded-full outline-none border-[2px] border-[#ff7643] bg-transparent text-[#ffff] placeholder:text-[#ff754383]' placeholder='Password' />
+                  <input type="text " className=' w-full  px-[1rem] py-[.5rem] pl-[4rem] rounded-full outline-none border-[2px] border-[#ff7643] bg-transparent text-[#ffff] placeholder:text-[#ff754383]' 
+                  placeholder='Password'
+                  name='password'
+                  value={formValues.password}
+                  onChange={handleChange}
+                  
+                  />
 
                   <div className='w-fit absolute top-[50%] left-5 translate-y-[-50%] border-r-[1px] pr-[5px] border-[#ff7643]'>
                     <LockSvg />
                   </div>
 
                 </div>
+                <p className='text-[#ff0000]'>{formErrors.password}</p>
+
 
                 <a href="" className='text-right text-[14px] font-extralight'>Forgot Password</a>
               </div>
@@ -75,10 +145,12 @@ const SignIn = () => {
 
               {/* -----------Inputs Div End--------------------------- */}
 
-            </div>
+            <button className=' w-full flex items-center justify-center bg-[#ff7643] p-[.5rem] rounded-full font-semibold text-[18px]' type='submit'>Login</button>
+            </form>
 
 
-            <button className='flex items-center justify-center bg-[#ff7643] p-[.5rem] rounded-full font-semibold text-[18px]'>Login</button>
+
+            
 
             {/* ----------------------Other SignIn Methods div---------------------------- */}
             <div className='flex flex-col gap-[1rem]'>
