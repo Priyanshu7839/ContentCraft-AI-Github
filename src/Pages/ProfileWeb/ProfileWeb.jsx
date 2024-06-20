@@ -4,11 +4,14 @@ import { IoMdArrowRoundForward } from "react-icons/io";
 import { CiEdit } from "react-icons/ci";
 import {UserImg,InviteRequestImg1,InviteRequestImg2,InviteRequestImg3} from '../../assets/index';
 import { useNavigate } from 'react-router-dom';
-
+import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { setcurrCollaborateSidebarOptions } from '../../Store/Slices/CollaborateSidebarOptionsSlice';
 import { setcurrAddCollaborationOptions } from '../../Store/Slices/AddCollaboratorOptionsSlice';
 import { setcurrTaskmanagerSidebarOptions } from '../../Store/Slices/TaskmanagerSidebarOptionsSlice';
+import { setcurrAccountSettingSlide } from '../../Store/Slices/AccountSettingsSlice';
+import { setCurrPanel} from '../../Store/Slices/settingSidebarSlice';
+
 
 
 const PercentageRing = ({ percentage }) => {
@@ -55,19 +58,23 @@ const PercentageRing = ({ percentage }) => {
   
 
 const ProfileWeb = () => {
+
+    const Userdata = useSelector((state)=>state.UserData.UserData);
+  
     
     const navigate = useNavigate();
 
     const dispatch = useDispatch();
 
     const UserData = {
-        img:UserImg,
-        name:"Trafalgar Law",
-        OrganisationName:"Oraganisation Name Here",
-        Designation:"UI Designer",
-        Email:"trafalgardwaterlaw@gmail.com",
-        Desc:"🚀 Hi there! I'm Trafalgar, a passionate content creator and AI enthusiast. My journey involves blending creativity with cutting-edge technology to craft engaging stories and insightful content. When I'm not immersed in the world of AI, you can find me exploring new genres of literature, experimenting with photography, or indulging in a cup of artisanal coffee Let's connect and explore the limitless possibilities of AI-driven creativity together! ✨📚☕️"
+        img:Userdata.UserImage,
+        name:Userdata.UserName,
+        OrganisationName:Userdata.UserOrganisation,
+        Designation:Userdata.UserRole,
+        Email:Userdata.UserEmail,
+        Desc:Userdata.UserDesc
     }
+    
 
 
     const Notifications = [
@@ -169,7 +176,14 @@ const ProfileWeb = () => {
                 </div>
 
                 <div className='w-fit absolute right-12 top-5'>
-                    <button className='text-[36px] text-[#ffffff]'>
+                    <button className='text-[36px] text-[#ffffff]'
+                    onClick={()=>{
+                        navigate('/contentcraft/settings')
+                        dispatch(setCurrPanel('Account Settings'))
+                        dispatch(setcurrAccountSettingSlide('Edit Personal Information'))
+                    }}
+                    
+                    >
                         <CiEdit/>
                     </button>
                 </div>
@@ -183,12 +197,16 @@ const ProfileWeb = () => {
                     {UserData.name}
                 </h1>
 
-                <h3 className='font-Inter font-semibold text-[16px] text-[#ffffff]'>
+                {UserData.OrganisationName &&
+                    
+                    
+                    <h3 className='font-Inter font-semibold text-[16px] text-[#ffffff]'>
                     {UserData.OrganisationName}
-                </h3>
+                </h3>}
             </div>
             {/* ------------------------------------------------ */}
             {/* ------------------------------------------------ */}
+            {UserData.Designation&& 
             <div className='flex items-center justify-start gap-[.5rem]'>
                 
                 <svg width="18" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -196,10 +214,13 @@ const ProfileWeb = () => {
                 <path d="M8 6L2 12L8 18" stroke="#FF7643" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
 
+               
+                
                 <h2 className='font-Inter font-semibold text-[16px] text-[#ffffff]'>
                     {UserData.Designation}
                 </h2>
             </div>
+            }
             {/* ------------------------------------------------ */}
             {/* ------------------------------------------------ */}
             <div className='flex items-center justify-start gap-[.5rem]'>
@@ -211,9 +232,11 @@ const ProfileWeb = () => {
             </div>
             {/* ------------------------------------------------ */}
             {/* ------------------------------------------------ */}
-            <h1 className='font-Inter font-normal text-[13px] text-[#ffffff]'>
+           {UserData.Desc&& 
+           
+           <h1 className='font-Inter font-normal text-[13px] text-[#ffffff]'>
                 {UserData.Desc}
-            </h1>
+            </h1>}
             {/* ------------------------------------------------ */}
 
         </div>

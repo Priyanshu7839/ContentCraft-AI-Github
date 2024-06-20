@@ -3,6 +3,8 @@ import { LockSvg, MailSvg, LineSvg } from '../../assets/SVGs/Svg'
 import { FaFacebook, FaGoogle, FaApple } from "react-icons/fa6";
 import { Link } from 'react-router-dom';
 
+
+
 const SignIn = () => {
 
   const initialValues ={
@@ -21,9 +23,10 @@ const SignIn = () => {
  const handleLoginSubmit = (e) => {
   e.preventDefault();
 
-  setformErrors(validate(formValues));
+  const errors = validate(formValues);
+  setformErrors(errors);
 
-  if(Object.keys(formErrors).length===0){
+  if(Object.keys(errors).length === 0){
     console.log('Email',formValues.email);
     console.log('Password',formValues.password);
   }

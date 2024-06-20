@@ -163,7 +163,7 @@ const ChangePassword = () => {
                                 </h1>
 
                                 {/* -------------Otp Inputs------------------------- */}
-                                <div className='w-[80%] flex items-center justify-between'>
+                                <div className='w-[80%] flex items-center justify-between gap-[.5rem]'>
                                     {
                                         otp.map((digit, index) => {
                                             return (
