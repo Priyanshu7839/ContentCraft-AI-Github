@@ -1,7 +1,7 @@
 import  { useState } from 'react'
 import { LockSvg, MailSvg, LineSvg } from '../../assets/SVGs/Svg'
 import { FaFacebook, FaGoogle, FaApple } from "react-icons/fa6";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const SignIn = () => {
   const initialValues = {
@@ -23,48 +23,14 @@ const SignIn = () => {
   const handleLoginSubmit = async (e) => {
   e.preventDefault();
 
-  const errors = validate(formValues);
-  setFormErrors(errors);
+  setformErrors(validate(formValues));
 
-  if (Object.keys(errors).length === 0) {
-    setLoading(true);
-    setApiError("");
-
-    try {
-      const response = await fetch('https://auth-api-31e2.onrender.com/api/auth/signin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formValues),
-        credentials: 'include' // Include credentials for cookies
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        // Handle successful login, e.g., save token, redirect user, etc.
-        console.log('Login successful', data);
-
-        // Redirect based on user role
-        if (data.user.role === 'admin' || data.user.role === 'user') {
-          navigate('/profile');
-        } else {
-          navigate('/');
-        }
-      } else {
-        // Handle errors from the API
-        setApiError(data.msg || 'Login failed. Please try again.');
-      }
-    } catch (error) {
-      // Handle network or other errors
-      setApiError('An error occurred. Please try again.');
-    } finally {
-      setLoading(false);
-    }
+  if(Object.keys(formErrors).length===0){
+    console.log('Email',formValues.email);
+    console.log('Password',formValues.password);
   }
-}
 
+ }
 
   const validate = (values) => {
     const errors = {};

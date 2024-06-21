@@ -12,6 +12,7 @@ import CollaborateSidebarOptionsSliceReducer from "./Slices/CollaborateSidebarOp
 import AddCollaboratorOptionsSliceReducer from "./Slices/AddCollaboratorOptionsSlice";
 import AICustomModelOptionsSliceReducer from "./Slices/AICustomModelOptionsSlice";
 import TaskmanagerSidebarOptionsSliceReducer from "./Slices/TaskmanagerSidebarOptionsSlice";
+import UserDataSliceReducer from "./Slices/UserDataSlice";
 
 export const Store = configureStore({
     reducer:{
@@ -27,7 +28,8 @@ export const Store = configureStore({
         CollaborateSidebarOptions:CollaborateSidebarOptionsSliceReducer,
         AddCollaboratorOptions:AddCollaboratorOptionsSliceReducer,
         AICustomModelOptions:AICustomModelOptionsSliceReducer,
-        TaskmanagerSidebarOptions:TaskmanagerSidebarOptionsSliceReducer
+        TaskmanagerSidebarOptions:TaskmanagerSidebarOptionsSliceReducer,
+        UserData:UserDataSliceReducer
 
 
     }
