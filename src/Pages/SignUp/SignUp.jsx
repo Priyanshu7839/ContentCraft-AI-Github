@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { LockSvg, MailSvg, LineSvg, SignUpNameIconSvg, ConfirmPasswordkeySvg } from '../../assets/SVGs/Svg'
 import { FaFacebook, FaGoogle, FaApple } from "react-icons/fa6";
 import { Link } from 'react-router-dom';
@@ -9,15 +9,13 @@ import { useDispatch } from 'react-redux';
 const SignUp = () => {
 
   const dispatch = useDispatch();
-
+  //-------------------------------------------------------------------//
   const initialValues = {
     name: '',
     email: '',
     password: ''
   }
-
   const [confirmPassword, setconfirmPassword] = useState('')
-
   const [formValues, setformvalues] = useState(initialValues);//data to be used for signup////
   const [formErrors, setformErrors] = useState({});
 
@@ -25,6 +23,7 @@ const SignUp = () => {
     const { name, value } = e.target;
     setformvalues({ ...formValues, [name]: value })
   }
+  //-------------------------------------------------------------------//
 
   const handleSignUpSubmit = (e) => {
     e.preventDefault();
@@ -43,14 +42,14 @@ const SignUp = () => {
         UserEmail: formValues.email,
         UserPassword: formValues.password
       }))
-      
+
       setotpForm(true)
 
       setformvalues(initialValues)
       setconfirmPassword('')
     }
 
-
+    //-------------------------------------------------------------------//
   }
 
 
@@ -94,7 +93,7 @@ const SignUp = () => {
 
   const [otpForm, setotpForm] = useState(false);
   const [otp, setotp] = useState(new Array(6).fill(""));
-  const [otpinputError,setotpinputError] = useState('');
+  const [otpinputError, setotpinputError] = useState('');
 
   function handleOTPINputchange(e, index) {
 
@@ -138,26 +137,26 @@ const SignUp = () => {
 
 
   useEffect(() => {
-      const interval = setInterval(() => {
-          if (seconds > 0) {
-              setseconds(seconds - 1);
-          }
-
-          if (seconds === 0) {
-              if (minutes === 0) {
-                  clearInterval(interval);
-              }
-              else {
-                  setseconds('59');
-                  setminutes(minutes - 1);
-              }
-          }
-      }, 1000);
-
-
-      return () => {
-          clearInterval(interval);
+    const interval = setInterval(() => {
+      if (seconds > 0) {
+        setseconds(seconds - 1);
       }
+
+      if (seconds === 0) {
+        if (minutes === 0) {
+          clearInterval(interval);
+        }
+        else {
+          setseconds('59');
+          setminutes(minutes - 1);
+        }
+      }
+    }, 1000);
+
+
+    return () => {
+      clearInterval(interval);
+    }
 
 
   }, [seconds, minutes]);
@@ -170,7 +169,7 @@ const SignUp = () => {
 
 
   return (
-    <div className='bg-[#06142e] min-h-[100vh] px-[2rem] py-[.5rem] font-Inter text-[#ffffff]' >
+    <div className='bg-[#06142e] min-h-[100vh] px-[2rem] py-[.5rem] font-Inter text-[#ffffff] overflow-x-hidden' >
       {/* -----------------------------Header Div-------------------------------------------------- */}
       <header className='flex items-center gap-[1rem]'>
         <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -193,7 +192,7 @@ const SignUp = () => {
       {/* -----------------------Form div--------------------------------------------------- */}
       <div className='flex gap-[2rem] items-center justify-center  h-[90vh]'>
         {/* ------------first Side------------------------------------------ */}
-        <div className='w-[50%] h-full flex flex-col items-center justify-center'>
+        <div className='w-[50%] h-full flex flex-col items-center justify-center '>
           <h1 className='font-semibold text-[60px]'>Join The <span className='text-[#ff7643]'>ContentCraft AI</span> Community</h1>
           <p className='font-semibold text-[24px]'>And <span className='text-[#ff7643]'>revolutionize</span> your content creation journey! Sign up now to explore the limitless possibilities of <span className='text-[#ff7643]'>AI-driven innovation.</span></p>
 
@@ -299,7 +298,8 @@ const SignUp = () => {
                 {/* -----------Inputs Div End--------------------------- */}
 
                 <button className='flex items-center justify-center bg-[#ff7643] p-[.5rem] rounded-full font-semibold text-[18px]' type='submit'
-               
+                  onClick={() => { setotpForm(true) }}
+
                 >Send OTP</button>
               </form>
 
@@ -337,81 +337,81 @@ const SignUp = () => {
         {/* ----------------------Send And Otp Input div--------------------------------- */}
         {otpForm &&
 
-               <form className='w-[50%] flex flex-col gap-[2rem] items-center justify-center'
-               onSubmit={handleOtpSubmit}
-               >
-                   <h1>
-                       Enter 6 digit code you got on your registered Email Address.
-                   </h1>
+          <form className={`w-[50%] flex flex-col gap-[2rem] items-center justify-center `}
+            onSubmit={handleOtpSubmit}
+          >
+           
+              <h1>
+                Enter 6 digit code you got on your registered Email Address.
+              </h1>
 
-                   {/* -------------Otp Inputs------------------------- */}
-                   <div className='w-[80%] flex items-center justify-between gap-[.5rem]'>
-                       {
-                           otp.map((digit, index) => {
-                               return (
-                                   <>
-                                       <input
-                                           type="text"
-                                           className='w-[48px] h-[48px] rounded-[10px] text-[#000] text-center'
-                                           maxLength={1}
-                                           onChange={(e) => { handleOTPINputchange(e, index) }}
-                                           value={digit}
-                                           onKeyDown={(e) => {
-                                               if (e.key === 'Backspace' && !otp[index] && index > 0) {
-                                                   e.preventDefault();
-                                                   let newOtp = [...otp];
-                                                   newOtp[index - 1] = '';
-                                                   setotp(newOtp);
-                                                   e.target.previousSibling.focus();
-                                               }
-                                           }}
-                                       />
-                                   </>
-                               )
-                           })
-                       }
-                   </div>
-                   {/* -------------Otp Inputs------------------------- */}
-                   {/* ------------resend button div------------------- */}
+              {/* -------------Otp Inputs------------------------- */}
+              <div className='w-[80%] flex items-center justify-between gap-[.5rem]'>
+                {
+                  otp.map((digit, index) => {
+                    return (
+                      <>
+                        <input
+                          type="text"
+                          className='w-[48px] h-[48px] rounded-[10px] text-[#000] text-center'
+                          maxLength={1}
+                          onChange={(e) => { handleOTPINputchange(e, index) }}
+                          value={digit}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Backspace' && !otp[index] && index > 0) {
+                              e.preventDefault();
+                              let newOtp = [...otp];
+                              newOtp[index - 1] = '';
+                              setotp(newOtp);
+                              e.target.previousSibling.focus();
+                            }
+                          }}
+                        />
+                      </>
+                    )
+                  })
+                }
+              </div>
+              {/* -------------Otp Inputs------------------------- */}
+              {/* ------------resend button div------------------- */}
 
-                   <div className='flex items-center justify-between w-[80%]'>
-                       <button
-                           onClick={() => {
-                               console.log("enabled")
-                           }}
-                           disabled={minutes > 0 || seconds > 0}
-                           className={`font-Inter font-medium  text-[16px] ${(minutes > 0 || seconds > 0) ? 'text-[#ff754332]' : 'text-[#ff7643]'}
+              <div className='flex items-center justify-between w-[80%]'>
+                <button
+                  onClick={() => {
+                    console.log("enabled")
+                  }}
+                  disabled={minutes > 0 || seconds > 0}
+                  className={`font-Inter font-medium  text-[16px] ${(minutes > 0 || seconds > 0) ? 'text-[#ff754332]' : 'text-[#ff7643]'}
                       transition-all duration-300
                       `
-                           }
-                       >
-                           Resend OTP
-                       </button>
+                  }
+                >
+                  Resend OTP
+                </button>
 
-                       <div className='font-Inter font-medium text-[#ff7643] text-[16px]'>
-                           {minutes < 10 ? `0${minutes}` : minutes}:
-                           {seconds < 10 ? `0${seconds}` : seconds}
-                       </div>
-                   </div>
-                   {/* ------------resend button div end---------------- */}
-
-
-                  {otpinputError && <p className="text-[#ff0000]">{otpinputError}</p> }
-
-                   {/* -------------Submit Button----------------------- */}
-                   <button className='w-[80%] flex items-center justify-center bg-[#ff7643] p-[.5rem] rounded-full font-semibold text-[18px]' type='submit'>Sign Up</button>
-                   {/* -------------Submit Button end------------------- */}
+                <div className='font-Inter font-medium text-[#ff7643] text-[16px]'>
+                  {minutes < 10 ? `0${minutes}` : minutes}:
+                  {seconds < 10 ? `0${seconds}` : seconds}
+                </div>
+              </div>
+              {/* ------------resend button div end---------------- */}
 
 
+              {otpinputError && <p className="text-[#ff0000]">{otpinputError}</p>}
+
+              {/* -------------Submit Button----------------------- */}
+              <button className='w-[80%] flex items-center justify-center bg-[#ff7643] p-[.5rem] rounded-full font-semibold text-[18px]' type='submit'
+               
+
+              >Sign Up</button>
+              {/* -------------Submit Button end------------------- */}
+
+
+          </form>
 
 
 
 
-               </form>
-          
-
-          
-      
         }
         {/* ----------------------Send And Otp Input div--------------------------------- */}
 
