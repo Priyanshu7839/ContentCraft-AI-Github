@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { LockSvg, MailSvg, LineSvg } from '../../assets/SVGs/Svg'
 import { FaFacebook, FaGoogle, FaApple } from "react-icons/fa6";
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -12,22 +13,22 @@ const SignIn = () => {
     password:""
   };
 
-  const [formValues,setformvalues] = useState(initialValues) // actual data to be used for sign in//////////
-  const [formErrors,setformErrors] = useState({});
+  const [formValues, setFormValues] = useState(initialValues);
+  const [formErrors, setFormErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState("");
+  const navigate = useNavigate(); 
 
- const handleChange = (e) => {
-  const {name,value} = e.target;
-  setformvalues({...formValues,[name]:value})
- }
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues({ ...formValues, [name]: value });
+  }
 
- 
- const handleLoginSubmit = async (e) => {
+  const handleLoginSubmit = async (e) => {
   e.preventDefault();
 
   const errors = validate(formValues);
-  setformErrors(errors);
+  setFormErrors(errors);
 
   if (Object.keys(errors).length === 0) {
     setLoading(true);
@@ -70,6 +71,7 @@ const SignIn = () => {
 
 
  const validate = (values) => {
+  
   const errors = {};
   const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
