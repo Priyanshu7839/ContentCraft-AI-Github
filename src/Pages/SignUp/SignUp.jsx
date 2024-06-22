@@ -21,8 +21,13 @@ const SignUp = () => {
   const [otpInputError, setOtpInputError] = useState('');
   const [seconds, setSeconds] = useState(59);
   const [minutes, setMinutes] = useState(1);
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [SigningUp, setSigningUp] = useState(false);
+  const [showUserInfoDiv, setshowUserInfoDiv] = useState(false);
+  const [sending, setsending] = useState(false);
+  const [apiError, setApiError] = useState('');
+
+
   const navigate = useNavigate()
 
   const handleChange = (e) => {
@@ -30,25 +35,26 @@ const SignUp = () => {
     setFormValues({ ...formValues, [name]: value });
   };
 
+  //-----------------------------SignUp Submit Button-----------------------------------------//
+
   const handleSignUpSubmit = async (e) => {
     e.preventDefault();
 
-    const valuesWithConfirmPassword = {
-      ...formValues,
-      confirmPassword: confirmPassword
-    };
+    
 
-    const errors = validate(valuesWithConfirmPassword);
+    const errors = validate(formValues);
     setFormErrors(errors);
+    setApiError('')
 
     if (Object.keys(errors).length === 0) {
+      setsending(true)
       try {
-        const response = await fetch('https://auth-api-31e2.onrender.com/api/auth/register', {
+        const response = await fetch('http://localhost:3000/api/auth/register', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(valuesWithConfirmPassword),
+          body: JSON.stringify(formValues),
         });
 
         const contentType = response.headers.get('content-type');
@@ -57,26 +63,31 @@ const SignUp = () => {
           if (response.ok) {
             console.log('Registration successful:', data.msg);
             dispatch(setUserData({
-              UserName: valuesWithConfirmPassword.name,
-              UserEmail: valuesWithConfirmPassword.email,
-              UserPassword: valuesWithConfirmPassword.password
+              UserName: formValues.name,
+              UserEmail: formValues.email,
+              UserPassword: formValues.password
             }));
             setOtpForm(true);
             setSubmitted(true);
-            setConfirmPassword("") 
           } else {
             console.error('Registration failed:', data.msg);
+            setApiError('Registration Failed  ' + ' ' + data.msg)
           }
         } else {
           const text = await response.text();
           console.error('Unexpected response format:', text);
+          setApiError('Oops! Something Happened, Please Try Again')
         }
       } catch (error) {
         console.error('Error:', error);
+        setApiError('Error' + ' ' + error)
+      }
+      finally{
+        setsending(false)
       }
     }
   };
-
+//--------------------------------Validator---------------------------------------//
   const validate = (values) => {
     const errors = {};
     const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
@@ -105,7 +116,7 @@ const SignUp = () => {
 
     return errors;
   };
-
+//----------------------------Otp Input Function------------------------------------//
   const handleOtpInputChange = (e, index) => {
     const value = e.target.value;
     let newOtp = [...otp];
@@ -122,14 +133,16 @@ const SignUp = () => {
       }
     }
   };
-
+//-------------------------------------Otp Submit Function------------------------------//
   const handleOtpSubmit = async (e) => {
     e.preventDefault();
 
     if (otp.every(digit => digit !== "")) {
       if (otp.every(digit => /^\d+$/.test(digit))) {
+        setOtpInputError('')
+        setSigningUp(true)
         try {
-          const response = await fetch('https://auth-api-31e2.onrender.com/api/auth/verify', {
+          const response = await fetch('http://localhost:3000/api/auth/verify', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -145,15 +158,20 @@ const SignUp = () => {
             setOtpForm(false);
             // Reset form values only if OTP verification was successful
             if (submitted) {
-              setFormValues(initialValues);
+              
               setSubmitted(false);
-              navigate("/signin")
+              setOtpForm(false)
+              setshowUserInfoDiv(true)
             }
           } else {
             console.error('Invalid OTP');
+            setOtpInputError('Invalid OTP')
           }
         } catch (error) {
           console.error('Error:', error);
+          setOtpInputError('Error' + ' '+ error)
+        }finally{
+          setSigningUp(false)
         }
       } else {
         setOtpInputError('OTP should contain only numbers');
@@ -162,11 +180,11 @@ const SignUp = () => {
       setOtpInputError('Enter Complete OTP');
     }
   };
-
+  // ----------------Resend OTP Function------------------------------------------------//
   const handleResendOtp = async () => {
     if (minutes === 0 && seconds === 0) {
       try {
-        const response = await fetch('https://auth-api-31e2.onrender.com/api/auth/verify', {
+        const response = await fetch('http://localhost:3000/api/auth//request-password-reset', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -185,7 +203,7 @@ const SignUp = () => {
       }
     }
   };
-
+// --------------------------Resend OTP Timer---------------------------------------//
   useEffect(() => {
     const interval = setInterval(() => {
       if (seconds > 0) {
@@ -206,6 +224,64 @@ const SignUp = () => {
       clearInterval(interval);
     };
   }, [seconds, minutes]);
+// --------------------------Resend OTP Timer End   ----------------------------------//
+ //---------------------Setting User Info-----------------------------------------//
+ const [userInfoError, setUserInfoError] = useState('');
+ const [userInformation, setUserInformation] = useState({
+  role: '',
+  organisation: '',
+  description: ''
+});
+
+ const handleUserInformationChange = (e) => {
+   const { name, value } = e.target;
+   setUserInformation({ ...userInformation, [name]: value });
+ };
+
+ const handleUserInformationSubmit = async (e) => {
+  e.preventDefault();
+  setUserInfoError('');
+
+  try {
+    const requestBody = { ...userInformation, email: formValues.email };
+    console.log('Request body:', requestBody);
+
+    const response = await fetch('http://localhost:3000/api/auth/update-user-details', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestBody)
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log('Server response:', data);
+
+      if (data.msg === 'User details updated successfully') {
+        console.log('User information saved successfully:', data.msg);
+        navigate('/signin');
+      } else if (data.msg === 'Not set, please do in settings') {
+        console.log('User details not fully updated:', data.msg);
+        navigate("/signin")
+      } else {
+        console.error('Unexpected response:', data);
+        setUserInfoError('Unexpected response from server');
+      }
+    } else {
+      const errorData = await response.json();
+      console.error('Server error:', errorData);
+      setUserInfoError('Server error: ' + errorData.msg);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    setUserInfoError('Error: ' + error.message);
+  }
+};
+
+
+//---------------------Setting User Info End-------------------------------------//
+
 
  return(
   <div className='bg-[#06142e] min-h-[100vh] px-[2rem] py-[.5rem] font-Inter text-[#ffffff]' >
@@ -232,8 +308,8 @@ const SignUp = () => {
           <p className='font-semibold text-[24px]'>And <span className='text-[#ff7643]'>revolutionize</span> your content creation journey! Sign up now to explore the limitless possibilities of <span className='text-[#ff7643]'>AI-driven innovation.</span></p>
 
         </div>
-
-        {!otpForm && (
+        {/* ----------------------------------Signup Form------------------------------------------ */}
+        {!otpForm && !showUserInfoDiv && (
           <div className='w-[50%] py-[2rem] px-[5rem] flex flex-col gap-[5rem]'>
             <div className='flex flex-col gap-[3rem]'>
               <h1 className='text-[20px] font-semibold'>Let's Craft Brilliance Together</h1>
@@ -282,18 +358,21 @@ const SignUp = () => {
                 <div className='w-full relative'>
                   <input type="password" className='w-full px-[1rem] py-[.5rem] pl-[4rem] rounded-full outline-none border-[2px] border-[#ff7643] bg-transparent text-[#fff] placeholder:text-[#ff754383]'
                     placeholder='Confirm Password'
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    name='confirmPassword'
+                    value={formValues.confirmPassword}
+                    onChange={handleChange}
                   />
                   <div className='w-fit absolute top-[50%] left-5 translate-y-[-50%] border-r-[1px] pr-[5px] border-[#ff7643]'>
                     <ConfirmPasswordkeySvg />
                   </div>
                 </div>
                 {formErrors.confirm && <p className="text-[#ff0000]">{formErrors.confirm}</p>}
-
+                {/* --------------------------------send Otp button--------------------- */}
                 <button className='flex items-center justify-center bg-[#ff7643] p-[.5rem] rounded-full font-semibold text-[18px]' type='submit'>
-                  Send OTP
+                  {sending ? 'Sending...' : 'Send OTP'}
                 </button>
+                {/* --------------------------------send Otp button end------------------ */}
+                {apiError && <p className="text-[#ff0000]">{apiError}</p>}
               </form>
 
               <div className='flex flex-col gap-[1rem]'>
@@ -314,8 +393,8 @@ const SignUp = () => {
             </div>
           </div>
         )}
-
-        {otpForm && (
+          {/* --------------------------------------Otp form-------------------------------------------- */}
+          {otpForm && (
           <form className='w-[50%] flex flex-col gap-[2rem] items-center justify-center' onSubmit={handleOtpSubmit}>
             <h1>Enter the 6-digit code you received on your registered Email Address.</h1>
             <div className='w-[80%] flex items-center justify-between gap-[.5rem]'>
@@ -353,14 +432,92 @@ const SignUp = () => {
             </div>
             {otpInputError && <p className="text-[#ff0000]">{otpInputError}</p>}
             <button className='w-[80%] flex items-center justify-center bg-[#ff7643] p-[.5rem] rounded-full font-semibold text-[18px]' type='submit'>
-              Sign Up
+              {SigningUp?'Signing Up...':'Sign Up'}
             </button>
           </form>
         )}
+
+        {/* --------------------------------Extra User Info Div---------------------------------------- */}
+        {showUserInfoDiv && (
+          <div className='w-[50%] py-[2rem] px-[5rem] flex flex-col gap-[5rem]'>
+            <div className='flex flex-col gap-[1rem]'>
+              <h1 className='text-[20px] font-semibold'>Tell Us More About You</h1>
+
+              <form className='flex flex-col gap-[1rem]' onSubmit={handleUserInformationSubmit}>
+
+                {/* ---------------------Role ------------------------------------------------- */}
+                <div className='w-full flex flex-col gap-[.5rem]'>
+                  <input type="text" className='w-full px-[1rem] py-[.5rem]  rounded-[5px] outline-none border-[2px] border-[#ff7643] bg-transparent text-[#fff] placeholder:text-[#ff754383]'
+                    placeholder='Your Role "ex: UI Designer"'
+                    name='role'
+                    value={userInformation.role}
+                    onChange={handleUserInformationChange}
+                  />
+
+                </div>
+               
+                {/* ---------------------Role end---------------------------------------------- */}
+
+                {/* ---------------------Organisation Name------------------------------------------------- */}
+
+                <div className='w-full flex flex-col gap-[.5rem]'>
+                  <input type="text" className='w-full px-[1rem] py-[.5rem] rounded-[5px] outline-none border-[2px] border-[#ff7643] bg-transparent text-[#fff] placeholder:text-[#ff754383]'
+                    placeholder='Organisation Name'
+                    name='organisation'
+                    value={userInformation.organisation}
+                    onChange={handleUserInformationChange}
+                  />
+
+                </div>
+                
+
+                {/* ---------------------organisation name End------------------------------------------------- */}
+
+
+
+                <div className='w-full flex flex-col gap-[.5rem]'>
+                  <textarea type="password" className='w-full px-[1rem] py-[.5rem]  rounded-[5px] outline-none border-[2px] border-[#ff7643] bg-transparent text-[#fff] placeholder:text-[#ff754383]'
+
+                    rows='7'
+                    placeholder='Tell Us about YourSelf...'
+                    name='description'
+                    value={userInformation.description}
+                    onChange={handleUserInformationChange}
+                  ></textarea>
+
+                </div>
+                {userInfoError && <p className="text-[#ff0000]">{userInfoError}</p> }
+
+
+                {/* -------------------------------- buttons --------------------- */}
+                <div className='flex items-center justify-between'>
+                  <button className='w-[45%] flex items-center justify-center  p-[.5rem] rounded-full font-semibold text-[18px] text-[#ff7643] border-[1px] border-[#ff7643]'
+                  onClick={()=>{
+                    setshowUserInfoDiv(false)
+                    navigate('/SignIn')
+                  }}
+                  
+                  >
+                    Cancel
+                  </button>
+                  {/* ------------------------------------- */}
+                  <button className='w-[45%] flex items-center justify-center bg-[#ff7643] p-[.5rem] rounded-full font-semibold text-[18px] border-[1px] border-[#ff7643]' type='submit'>
+                    Confirm
+                  </button>
+                </div>
+
+              </form>
+
+
+
+
+            </div>
+          </div>
+        )}
+        {/* --------------------------------Extra User Info Div end------------------ */}
       </div>
     </div>
   );
 };
 
 export default SignUp;
-

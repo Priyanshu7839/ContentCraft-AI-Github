@@ -32,7 +32,7 @@ const SignIn = () => {
 
       try {
         const response = await fetch(
-          "https://auth-api-31e2.onrender.com/api/auth/signin",
+          "http://localhost:3000/api/auth/signin",
           {
             method: "POST",
             headers: {
@@ -48,13 +48,9 @@ const SignIn = () => {
         if (response.ok) {
           // Handle successful login, e.g., save token, redirect user, etc.
           console.log("Login successful", data);
+          navigate("/profile") //change it in future if needed
 
-          // Redirect based on user role
-          if (data.user.role === "admin" || data.user.role === "user") {
-            navigate("/profile");
-          } else {
-            navigate("/");
-          }
+        
         } else {
           // Handle errors from the API
           setApiError(data.msg || "Login failed. Please try again.");
