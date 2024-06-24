@@ -46,17 +46,18 @@ const SignIn = () => {
         const data = await response.json();
 
         if (response.ok) {
-          // Handle successful login, e.g., save token, redirect user, etc.
+          // Handle successful login
           console.log("Login successful", data);
-          navigate("/profile") //change it in future if needed
-
+          navigate("/profile"); // Redirect to profile page after successful login
         
         } else {
           // Handle errors from the API
+          console.error('Sign-in error:', data.msg);
           setApiError(data.msg || "Login failed. Please try again.");
         }
       } catch (error) {
         // Handle network or other errors
+        console.error('Error:', error);
         setApiError("An error occurred. Please try again.");
       } finally {
         setLoading(false);

@@ -21,14 +21,19 @@ const SignUp = () => {
   const [otpInputError, setOtpInputError] = useState('');
   const [seconds, setSeconds] = useState(59);
   const [minutes, setMinutes] = useState(1);
-  const [submitted, setSubmitted] = useState(false);
+  const [Submitted, setSubmitted] = useState(false);
   const [SigningUp, setSigningUp] = useState(false);
-  const [showUserInfoDiv, setshowUserInfoDiv] = useState(false);
-  const [sending, setsending] = useState(false);
+  const [showUserInfoDiv, setShowUserInfoDiv] = useState(false);
+  const [sending, setSending] = useState(false);
   const [apiError, setApiError] = useState('');
+  const [userInfoError, setUserInfoError] = useState('');
+  const [userInformation, setUserInformation] = useState({
+    role: '',
+    organisation: '',
+    description: ''
+  });
 
-
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,18 +41,15 @@ const SignUp = () => {
   };
 
   //-----------------------------SignUp Submit Button-----------------------------------------//
-
   const handleSignUpSubmit = async (e) => {
     e.preventDefault();
-
-    
-
+  
     const errors = validate(formValues);
     setFormErrors(errors);
-    setApiError('')
-
+    setApiError('');
+  
     if (Object.keys(errors).length === 0) {
-      setsending(true)
+      setSending(true);
       try {
         const response = await fetch('http://localhost:3000/api/auth/register', {
           method: 'POST',
@@ -56,38 +58,32 @@ const SignUp = () => {
           },
           body: JSON.stringify(formValues),
         });
-
-        const contentType = response.headers.get('content-type');
-        if (contentType && contentType.includes('application/json')) {
-          const data = await response.json();
-          if (response.ok) {
-            console.log('Registration successful:', data.msg);
-            dispatch(setUserData({
-              UserName: formValues.name,
-              UserEmail: formValues.email,
-              UserPassword: formValues.password
-            }));
-            setOtpForm(true);
-            setSubmitted(true);
-          } else {
-            console.error('Registration failed:', data.msg);
-            setApiError('Registration Failed  ' + ' ' + data.msg)
-          }
+  
+        const data = await response.json();
+        if (response.ok) {
+          console.log('Registration successful:', data.msg);
+          dispatch(setUserData({
+            UserName: formValues.name,
+            UserEmail: formValues.email,
+            UserPassword: formValues.password
+          }));
+          setOtpForm(true);
+          setSubmitted(true);
         } else {
-          const text = await response.text();
-          console.error('Unexpected response format:', text);
-          setApiError('Oops! Something Happened, Please Try Again')
+          console.error('Registration failed:', data.msg);
+          setApiError('Registration Failed: ' + data.msg);
         }
       } catch (error) {
         console.error('Error:', error);
-        setApiError('Error' + ' ' + error)
-      }
-      finally{
-        setsending(false)
+        setApiError('Error: ' + error.message);
+      } finally {
+        setSending(false);
       }
     }
   };
-//--------------------------------Validator---------------------------------------//
+  
+
+  //--------------------------------Validator---------------------------------------//
   const validate = (values) => {
     const errors = {};
     const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
@@ -116,7 +112,8 @@ const SignUp = () => {
 
     return errors;
   };
-//----------------------------Otp Input Function------------------------------------//
+
+  //----------------------------Otp Input Function------------------------------------//
   const handleOtpInputChange = (e, index) => {
     const value = e.target.value;
     let newOtp = [...otp];
@@ -133,14 +130,16 @@ const SignUp = () => {
       }
     }
   };
-//-------------------------------------Otp Submit Function------------------------------//
+
+  //-------------------------------------Otp Submit Function------------------------------//
   const handleOtpSubmit = async (e) => {
     e.preventDefault();
-
+   
+  
     if (otp.every(digit => digit !== "")) {
       if (otp.every(digit => /^\d+$/.test(digit))) {
-        setOtpInputError('')
-        setSigningUp(true)
+        setOtpInputError('');
+        setSigningUp(true);
         try {
           const response = await fetch('http://localhost:3000/api/auth/verify', {
             method: 'POST',
@@ -152,26 +151,43 @@ const SignUp = () => {
               otp: otp.join('')
             }),
           });
-
+  
           if (response.ok) {
             console.log('Email verified successfully');
             setOtpForm(false);
-            // Reset form values only if OTP verification was successful
-            if (submitted) {
-              
-              setSubmitted(false);
-              setOtpForm(false)
-              setshowUserInfoDiv(true)
-            }
+            setShowUserInfoDiv(true);
           } else {
-            console.error('Invalid OTP');
-            setOtpInputError('Invalid OTP')
+            const data = await response.json();
+            console.error('Server responded with error:', data.msg);
+  
+            if (data.msg === 'Too many invalid OTP attempts. Account deleted. Please register again.') {
+              setOtpInputError(data.msg);
+              // Reset OTP input
+              setOtp(new Array(6).fill(""));
+              // Hide OTP form
+              setOtpForm(false);
+            } else {
+              // Update remaining attempts based on response
+              const remainingAttempts = 5 - (data.failedAttempts || 0);
+              if (remainingAttempts > 0) {
+                setOtpInputError(`Invalid OTP. ${remainingAttempts} attempts remaining.`);
+                setOtp(new Array(6).fill(""));
+                
+              } else {
+                setOtpInputError('Too many attempts. Please register again.');
+                // Reset OTP input
+                setOtp(new Array(6).fill(""));
+                // Hide OTP form
+                setOtpForm(false);
+                setOtpInputError('');
+              }
+            }
           }
         } catch (error) {
           console.error('Error:', error);
-          setOtpInputError('Error' + ' '+ error)
-        }finally{
-          setSigningUp(false)
+          setOtpInputError('Error: ' + error.message);
+        } finally {
+          setSigningUp(false);
         }
       } else {
         setOtpInputError('OTP should contain only numbers');
@@ -180,11 +196,12 @@ const SignUp = () => {
       setOtpInputError('Enter Complete OTP');
     }
   };
+  
   // ----------------Resend OTP Function------------------------------------------------//
   const handleResendOtp = async () => {
     if (minutes === 0 && seconds === 0) {
       try {
-        const response = await fetch('http://localhost:3000/api/auth//request-password-reset', {
+        const response = await fetch('http://localhost:3000/api/auth/request-password-reset', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -203,7 +220,8 @@ const SignUp = () => {
       }
     }
   };
-// --------------------------Resend OTP Timer---------------------------------------//
+
+  // --------------------------Resend OTP Timer---------------------------------------//
   useEffect(() => {
     const interval = setInterval(() => {
       if (seconds > 0) {
@@ -224,60 +242,53 @@ const SignUp = () => {
       clearInterval(interval);
     };
   }, [seconds, minutes]);
-// --------------------------Resend OTP Timer End   ----------------------------------//
- //---------------------Setting User Info-----------------------------------------//
- const [userInfoError, setUserInfoError] = useState('');
- const [userInformation, setUserInformation] = useState({
-  role: '',
-  organisation: '',
-  description: ''
-});
 
- const handleUserInformationChange = (e) => {
-   const { name, value } = e.target;
-   setUserInformation({ ...userInformation, [name]: value });
- };
+  //---------------------Setting User Info-----------------------------------------//
+  const handleUserInformationChange = (e) => {
+    const { name, value } = e.target;
+    setUserInformation({ ...userInformation, [name]: value });
+  };
 
- const handleUserInformationSubmit = async (e) => {
-  e.preventDefault();
-  setUserInfoError('');
+  const handleUserInformationSubmit = async (e) => {
+    e.preventDefault();
+    setUserInfoError('');
 
-  try {
-    const requestBody = { ...userInformation, email: formValues.email };
-    console.log('Request body:', requestBody);
+    try {
+      const requestBody = { ...userInformation, email: formValues.email };
+      console.log('Request body:', requestBody);
 
-    const response = await fetch('http://localhost:3000/api/auth/update-user-details', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(requestBody)
-    });
+      const response = await fetch('http://localhost:3000/api/auth/update-user-details', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody)
+      });
 
-    if (response.ok) {
-      const data = await response.json();
-      console.log('Server response:', data);
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Server response:', data);
 
-      if (data.msg === 'User details updated successfully') {
-        console.log('User information saved successfully:', data.msg);
-        navigate('/signin');
-      } else if (data.msg === 'Not set, please do in settings') {
-        console.log('User details not fully updated:', data.msg);
-        navigate("/signin")
+        if (data.msg === 'User details updated successfully') {
+          console.log('User information saved successfully:', data.msg);
+          navigate('/signin');
+        } else if (data.msg === 'Not set, please do in settings') {
+          console.log('User details not fully updated:', data.msg);
+          navigate("/signin")
+        } else {
+          console.error('Unexpected response:', data);
+          setUserInfoError('Unexpected response from server');
+        }
       } else {
-        console.error('Unexpected response:', data);
-        setUserInfoError('Unexpected response from server');
+        const errorData = await response.json();
+        console.error('Server error:', errorData);
+        setUserInfoError('Server error: ' + errorData.msg);
       }
-    } else {
-      const errorData = await response.json();
-      console.error('Server error:', errorData);
-      setUserInfoError('Server error: ' + errorData.msg);
+    } catch (error) {
+      console.error('Error:', error);
+      setUserInfoError('Error: ' + error.message);
     }
-  } catch (error) {
-    console.error('Error:', error);
-    setUserInfoError('Error: ' + error.message);
-  }
-};
+  };
 
 
 //---------------------Setting User Info End-------------------------------------//
