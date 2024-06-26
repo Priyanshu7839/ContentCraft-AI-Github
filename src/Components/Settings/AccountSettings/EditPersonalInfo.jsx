@@ -46,12 +46,12 @@ const EditPersonalInfo = () => {
             console.log('Desc',formValues.desc);
             console.log('Role',formValues.role)
       
-          dispatch(setUserData({
-            UserName:formValues.firstName + ' ' + formValues.lastName,
-            UserRole:formValues.role,
-            UserDesc:formValues.desc,
-            UserOrganisation:formValues.organisation
-          }))
+        //   dispatch(setUserData({
+        //     UserName:formValues.firstName + ' ' + formValues.lastName,
+        //     UserRole:formValues.role,
+        //     UserDesc:formValues.desc,
+        //     UserOrganisation:formValues.organisation
+        //   }))
 
           setformValues(initialValues)
           }

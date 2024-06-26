@@ -5,7 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { setcurrAccountSettingSlide } from '../../Store/Slices/AccountSettingsSlice';
 import { setCurrPanel } from '../../Store/Slices/settingSidebarSlice';
 import { setcurrNavbarElements } from '../../Store/Slices/NavbarElementsSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
+import { setUserData } from '../../Store/Slices/UserDataSlice';
 
 
 
@@ -18,10 +19,13 @@ const ProfileSidebar = ({ setshowProfileSidebar }) => {
 
     const navigate = useNavigate();
 
+    const Userdata = useSelector((state)=>state.UserData.UserData);
+
+
 
     return (
         <div className='w-[350px] h-[100vh] bg-[#374868] rounded-l-[10px] px-[2rem] py-[2rem]'>
-            <div className='flex h-full flex-col justify-between'>
+            <div className='flex h-full flex-col justify-between gap-[.5rem]'>
 
                 {/* -------------------------------------------------------- */}
                 <div className='flex flex-col gap-[3rem]'>
@@ -33,7 +37,7 @@ const ProfileSidebar = ({ setshowProfileSidebar }) => {
                             <img src={UserImg} alt="" className='w-[100%] h-[100%] object-fit' />
 
                         </div>
-                        <h1 className='font-Inter font-semibold text-[#FFFFFF] text-[16px]'>TrafalGar Law</h1>
+                        <h1 className='font-Inter font-semibold text-[#FFFFFF] text-[16px]'>{Userdata.UserName}</h1>
                     </div>
 
                     <div className='flex flex-col gap-[.5rem]'>
@@ -137,7 +141,12 @@ const ProfileSidebar = ({ setshowProfileSidebar }) => {
                     </div>
                     {/* ------------------------------------- */}
                     {/* ------------------------------------- */}
-                    <div className='flex items-center justify-between bg-[#06142e] px-[2rem] py-[1rem] rounded-[10px] cursor-pointer'>
+                    <div className='flex items-center justify-between bg-[#06142e] px-[2rem] py-[1rem] rounded-[10px] cursor-pointer ' 
+                    onClick={()=>{
+                       localStorage.clear()
+                        navigate('/SignIn')
+                    }}
+                    >
                         <div className='flex gap-[1rem] items-center'>
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />

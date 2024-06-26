@@ -22,11 +22,10 @@ const SignUp = () => {
   const [seconds, setSeconds] = useState(59);
   const [minutes, setMinutes] = useState(1);
   const [submitted, setSubmitted] = useState(false);
-  const [SigningUp,setSigningUp] = useState(false)
-  const [showUserInfoDiv, setshowUserInfoDiv] = useState(false)
+  const [SigningUp, setSigningUp] = useState(false);
+  const [showUserInfoDiv, setshowUserInfoDiv] = useState(false);
   const [sending, setsending] = useState(false);
-  const [apiError, setapiError] = useState('');
-
+  const [apiError, setApiError] = useState('');
 
 
   const navigate = useNavigate()
@@ -45,7 +44,7 @@ const SignUp = () => {
 
     const errors = validate(formValues);
     setFormErrors(errors);
-    setapiError('')
+    setApiError('')
 
     if (Object.keys(errors).length === 0) {
       setsending(true)
@@ -63,25 +62,25 @@ const SignUp = () => {
           const data = await response.json();
           if (response.ok) {
             console.log('Registration successful:', data.msg);
-            dispatch(setUserData({
-              UserName: formValues.name,
-              UserEmail: formValues.email,
-              UserPassword: formValues.password
-            }));
+            // dispatch(setUserData({
+            //   UserName: formValues.name,
+            //   UserEmail: formValues.email,
+            //   UserPassword: formValues.password
+            // }));
             setOtpForm(true);
             setSubmitted(true);
           } else {
             console.error('Registration failed:', data.msg);
-            setapiError('Registration Failed  ' + ' ' + data.msg)
+            setApiError('Registration Failed  ' + ' ' + data.msg)
           }
         } else {
           const text = await response.text();
           console.error('Unexpected response format:', text);
-          setapiError('Oops! Something Happened, Please Try Again')
+          setApiError('Oops! Something Happened, Please Try Again')
         }
       } catch (error) {
         console.error('Error:', error);
-        setapiError('Error' + ' ' + error)
+        setApiError('Error' + ' ' + error)
       }
       finally{
         setsending(false)
@@ -159,7 +158,7 @@ const SignUp = () => {
             setOtpForm(false);
             // Reset form values only if OTP verification was successful
             if (submitted) {
-              setFormValues(initialValues);
+              
               setSubmitted(false);
               setOtpForm(false)
               setshowUserInfoDiv(true)
@@ -185,7 +184,7 @@ const SignUp = () => {
   const handleResendOtp = async () => {
     if (minutes === 0 && seconds === 0) {
       try {
-        const response = await fetch('https://auth-api-31e2.onrender.com/api/auth/verify', {
+        const response = await fetch('https://auth-api-31e2.onrender.com/api/auth//request-password-reset', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -227,44 +226,58 @@ const SignUp = () => {
   }, [seconds, minutes]);
 // --------------------------Resend OTP Timer End   ----------------------------------//
  //---------------------Setting User Info-----------------------------------------//
- const [UserInfoError , SetUserInfoError] = useState()
- const [UserInformation,setUserInformation] = useState({
-  role:'',
-  organisation:'',
-  desc:''
-})
+ const [userInfoError, setUserInfoError] = useState('');
+ const [userInformation, setUserInformation] = useState({
+  role: '',
+  organisation: '',
+  description: ''
+});
 
+ const handleUserInformationChange = (e) => {
+   const { name, value } = e.target;
+   setUserInformation({ ...userInformation, [name]: value });
+ };
 
-const handleUserInformationChange = (e) => {
-  const { name, value } = e.target;
-  setUserInformation({ ...UserInformation, [name]: value });
+ const handleUserInformationSubmit = async (e) => {
+  e.preventDefault();
+  setUserInfoError('');
+
+  try {
+    const requestBody = { ...userInformation, email: formValues.email };
+    console.log('Request body:', requestBody);
+
+    const response = await fetch('https://auth-api-31e2.onrender.com/api/auth/update-user-details', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestBody)
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log('Server response:', data);
+
+      if (data.msg === 'User details updated successfully') {
+        console.log('User information saved successfully:', data.msg);
+        navigate('/signin');
+      } else if (data.msg === 'Not set, please do in settings') {
+        console.log('User details not fully updated:', data.msg);
+        navigate("/signin")
+      } else {
+        console.error('Unexpected response:', data);
+        setUserInfoError('Unexpected response from server');
+      }
+    } else {
+      const errorData = await response.json();
+      console.error('Server error:', errorData);
+      setUserInfoError('Server error: ' + errorData.msg);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    setUserInfoError('Error: ' + error.message);
+  }
 };
-
-
-const handleUserInformationSubmit = (e) => {
-  e.preventDefault()
-  SetUserInfoError('')
-
-
-  if(!UserInformation.role && ! UserInformation.organisation && !UserInformation.desc){
-    SetUserInfoError('Please Fill Any One Field')
-  }
-  else{
-    navigate('/SignIn')
-    setshowUserInfoDiv(false)
-    setOtpForm(false)
-    console.log('role : ', UserInformation.role)
-    console.log('orgns : ', UserInformation.organisation)
-    console.log('desc : ', UserInformation.desc)
-    setUserInformation({
-      role:'',organisation:'',desc:''
-    })
-  }
-}
-
-
-
-
 
 
 //---------------------Setting User Info End-------------------------------------//
@@ -437,7 +450,7 @@ const handleUserInformationSubmit = (e) => {
                   <input type="text" className='w-full px-[1rem] py-[.5rem]  rounded-[5px] outline-none border-[2px] border-[#ff7643] bg-transparent text-[#fff] placeholder:text-[#ff754383]'
                     placeholder='Your Role "ex: UI Designer"'
                     name='role'
-                    value={UserInformation.role}
+                    value={userInformation.role}
                     onChange={handleUserInformationChange}
                   />
 
@@ -451,7 +464,7 @@ const handleUserInformationSubmit = (e) => {
                   <input type="text" className='w-full px-[1rem] py-[.5rem] rounded-[5px] outline-none border-[2px] border-[#ff7643] bg-transparent text-[#fff] placeholder:text-[#ff754383]'
                     placeholder='Organisation Name'
                     name='organisation'
-                    value={UserInformation.organisation}
+                    value={userInformation.organisation}
                     onChange={handleUserInformationChange}
                   />
 
@@ -467,13 +480,13 @@ const handleUserInformationSubmit = (e) => {
 
                     rows='7'
                     placeholder='Tell Us about YourSelf...'
-                    name='desc'
-                    value={UserInformation.desc}
+                    name='description'
+                    value={userInformation.description}
                     onChange={handleUserInformationChange}
                   ></textarea>
 
                 </div>
-                {UserInfoError && <p className="text-[#ff0000]">{UserInfoError}</p> }
+                {userInfoError && <p className="text-[#ff0000]">{userInfoError}</p> }
 
 
                 {/* -------------------------------- buttons --------------------- */}
@@ -508,4 +521,3 @@ const handleUserInformationSubmit = (e) => {
 };
 
 export default SignUp;
-

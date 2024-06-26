@@ -9,7 +9,8 @@ const initialState = {
         UserPassword:'',
         UserRole:'No Role set',
         UserDesc:'No Description Set. You can update it in settings.',
-        UserOrganisation:'Organisation Name Here'
+        UserOrganisation:'Organisation Name Here',
+        token:''
     }
 }
 

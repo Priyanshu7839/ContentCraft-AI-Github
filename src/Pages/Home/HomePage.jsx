@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { setcurrAICustomModelOption } from '../../Store/Slices/AICustomModelOptionsSlice';
 import { setcurrNavbarElements } from '../../Store/Slices/NavbarElementsSlice';
 import { setcurrCollaborateSidebarOptions } from '../../Store/Slices/CollaborateSidebarOptionsSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 
@@ -111,11 +111,13 @@ const HomePage = () => {
         }
     ]
 
+    const Userdata = useSelector((state)=>state.UserData.UserData);
+
   return (
     <div className='homePage bg-[#06142e]'>
         {/* ---------------------------------------------------Section-1------------------------------------------------------ */}
        <div className='w-full p-[1rem]  border-b-[1px] border-[#374868] '>
-            <h1 className='font-Inter text-[28px] font-semibold text-[#FFFFFF]'> <span className='text-[#ff7643]'>Welcome</span> Trafalgar</h1>
+            <h1 className='font-Inter text-[28px] font-semibold text-[#FFFFFF]'> <span className='text-[#ff7643]'>Welcome</span> {Userdata.UserName}</h1>
 
             <h4 className='font-Inter text-[16px] font-medium text-[#FFFFFF]'>Engage in productive collaboration with ContentCraft AI. ContentCraft-AI  is your collaborative workspace where ideas come to life. Explore, 
                 create, and collaborate seamlessly to elevate your projects.</h4>

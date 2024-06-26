@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-
+import { useSelector } from "react-redux";
 
 import { ProfileWeb, Settings, HomePage, Collaborate, AICustomModel, SignIn, ConsultWithAI, CreateWithAI, TaskManager, SignUp, DeleteAccount, Favorites ,LogOutEveryWhere} from "../Pages";
 
@@ -8,7 +8,10 @@ import MainLayout from '../Layouts/MainLayout';
 import SettingsLayout from "../Layouts/SettingsLayout";
 
 
+
+
 const Routers = () => {
+  const Userdata = useSelector((state)=>state.UserData.UserData);
 
   return (
     <Routes>
@@ -35,8 +38,9 @@ const Routers = () => {
           element={<HomePage />}
         />
         <Route path="/profile"
-          element={<ProfileWeb />}
+        element={<ProfileWeb/>}
         />
+        
         <Route path="/LogoutEverywhere"
           element={<LogOutEveryWhere />}
         />

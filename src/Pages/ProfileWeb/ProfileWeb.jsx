@@ -74,7 +74,7 @@ const ProfileWeb = () => {
         Email:Userdata.UserEmail,
         Desc:Userdata.UserDesc
     }
-    
+ 
 
 
     const Notifications = [

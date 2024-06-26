@@ -15,6 +15,9 @@ const Header = () => {
     const navigate = useNavigate();
 
     const[showProfileSidebar,setshowProfileSidebar] = useState(false);
+
+    const Userdata = useSelector((state)=>state.UserData.UserData);
+
  
 
   return (
@@ -116,7 +119,7 @@ const Header = () => {
                 <img src={UserImg} alt=""  className='w-[100%] h-[100%] object-fit'/>
 
             </div>
-            <h1 className='font-Inter font-semibold text-[#FFFFFF] text-[16px]'>TrafalGar Law</h1>
+            <h1 className='font-Inter font-semibold text-[#FFFFFF] text-[16px]'>{Userdata.UserName}</h1>
        </div>
 
        {showProfileSidebar &&
