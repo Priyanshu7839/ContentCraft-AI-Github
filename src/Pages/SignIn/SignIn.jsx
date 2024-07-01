@@ -44,11 +44,11 @@ const SignIn = () => {
         );
 
         const data = await response.json();
-
+     
         if (response.ok) {
           // Handle successful login
           console.log("Login successful", data);
-          navigate("/profile"); // Redirect to profile page after successful login
+          navigate("/profile");  // Redirect to profile page after successful login
         
         } else {
           // Handle errors from the API
